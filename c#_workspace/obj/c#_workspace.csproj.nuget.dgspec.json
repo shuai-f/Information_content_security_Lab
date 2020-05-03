@@ -1,0 +1,64 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\VS Code\\c#_workspace\\c#_workspace.csproj": {}
+  },
+  "projects": {
+    "E:\\VS Code\\c#_workspace\\c#_workspace.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\VS Code\\c#_workspace\\c#_workspace.csproj",
+        "projectName": "c#_workspace",
+        "projectPath": "E:\\VS Code\\c#_workspace\\c#_workspace.csproj",
+        "packagesPath": "C:\\Users\\冯帅\\.nuget\\packages\\",
+        "outputPath": "E:\\VS Code\\c#_workspace\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\冯帅\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
