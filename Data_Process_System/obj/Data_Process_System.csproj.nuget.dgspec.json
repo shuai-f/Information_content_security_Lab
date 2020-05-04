@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\VS Code\\c#_workspace\\c#_workspace.csproj": {}
+    "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\Data_Process_System.csproj": {}
   },
   "projects": {
-    "E:\\VS Code\\c#_workspace\\c#_workspace.csproj": {
+    "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\Data_Process_System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\VS Code\\c#_workspace\\c#_workspace.csproj",
-        "projectName": "c#_workspace",
-        "projectPath": "E:\\VS Code\\c#_workspace\\c#_workspace.csproj",
+        "projectUniqueName": "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\Data_Process_System.csproj",
+        "projectName": "Data_Process_System",
+        "projectPath": "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\Data_Process_System.csproj",
         "packagesPath": "C:\\Users\\冯帅\\.nuget\\packages\\",
-        "outputPath": "E:\\VS Code\\c#_workspace\\obj\\",
+        "outputPath": "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\冯帅\\AppData\\Roaming\\NuGet\\NuGet.Config"

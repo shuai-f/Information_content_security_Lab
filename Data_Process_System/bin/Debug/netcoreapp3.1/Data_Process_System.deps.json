@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "c#_workspace/1.0.0": {
+      "Data_Process_System/1.0.0": {
         "dependencies": {
           "MySql.Data": "8.0.20"
         },
         "runtime": {
-          "c#_workspace.dll": {}
+          "Data_Process_System.dll": {}
         }
       },
       "BouncyCastle.NetCore/1.8.3": {
@@ -1051,7 +1051,7 @@
     }
   },
   "libraries": {
-    "c#_workspace/1.0.0": {
+    "Data_Process_System/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
