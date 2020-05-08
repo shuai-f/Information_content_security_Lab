@@ -36,8 +36,16 @@ namespace c__workspace
         static void test_spider()
         {
             Spider spider = new Spider();
-            string result = spider.get_html_from_url("https://tieba.baidu.com");
+            string result = null;
+            // result = spider.get_html_from_url("https://weibo.com");
             // Console.WriteLine(result);
+            //string strBaseUrl = "https://m.weibo.cn/api/container/getIndex?type=uid&value=1862317094";
+            string strBaseUrl = "https://www.weibo.com/p/1005051862317094/home?from=page_100505&mod=TAB#place";
+            result = spider.get_html_from_url(strBaseUrl);
+            // result = spider.test_get_html(strBaseUrl);
+            Console.WriteLine(result);
+            // spider.parse_html(result);
+
         }
     }
 }
