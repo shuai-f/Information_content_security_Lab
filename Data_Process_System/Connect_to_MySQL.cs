@@ -44,7 +44,8 @@ namespace c__workspace
         // 数据库查询操作
         public ArrayList select_by_keyword(string keyword)
         {
-            string query = "select " + page_property + " from " + keyword_list + " where " + keyword_property + " = '" + keyword_list + "'";
+            string query = "select " + page_property + " from " + keyword_list + " where " + keyword_property + " = '" + keyword + "'";
+            Console.WriteLine(query);
             ArrayList list = new ArrayList();
             MySqlConnection conn = new MySqlConnection(connect_config);
             MySqlCommand command = new MySqlCommand(query, conn);
