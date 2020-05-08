@@ -41,29 +41,22 @@ namespace c__workspace
             return true;
         }
 
-        /// <summary> 爬取网页 </summary>
-        /// <param name="url"> url </param> 
-        /// <returns>  </returns>
-        public void crawl_page(string url)
-        {
-            string data = null;
-            string file_path = url+ ".html";
-            write_to_file(file_path, data);
-            return;
-        }
 
         /// <summary> 传入URL返回网页的html代码 </summary>
         /// <param name="Url"> Url </param>
         /// <returns>返回页面的源代码</returns>
-        public string GetUrltoHtml(string Url)
+        public string get_html_from_url(string Url)
         {
             Encoding encode = new UTF8Encoding();
             try
             {
                 HttpWebRequest wRequest = (HttpWebRequest)WebRequest.Create(Url);
+                wRequest.AllowAutoRedirect = true; // 自动跳转
                 //伪造浏览器数据，避免被防采集程序过滤
-                wRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50215; CrazyCoder.cn;www.aligong.com)";
-
+                wRequest.UserAgent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
+                wRequest.Method = "GET"; //获取数据的方法
+                wRequest.KeepAlive = true; //保持活性
+                // 响应
                 HttpWebResponse wRespond = (HttpWebResponse)wRequest.GetResponse();
                 
                 // 获取输入流
@@ -87,6 +80,12 @@ namespace c__workspace
                 Console.WriteLine(ex.Message);
             }
             return "";
+        }
+
+        public void parse_html(string html)
+        {
+            html = Regex.Replace(html, @"<script[^>]*?>.*?</script>", string.Empty, RegexOptions.IgnoreCase);
+            
         }
     }
 }

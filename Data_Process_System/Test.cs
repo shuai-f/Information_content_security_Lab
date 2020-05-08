@@ -36,7 +36,7 @@ namespace c__workspace
         static void test_spider()
         {
             Spider spider = new Spider();
-            string result = spider.GetUrltoHtml("https://weibo.cn");
+            string result = spider.get_html_from_url("https://tieba.baidu.com");
             // Console.WriteLine(result);
         }
     }
