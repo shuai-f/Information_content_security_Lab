@@ -12,7 +12,7 @@ namespace c__workspace
         /// <returns> void </returns>
         public static void AddLog(string msg)
         {
-            string saveFolder = "Log";//日志文件保存路径
+            string saveFolder = "Data_Stored\\Log";//日志文件保存路径
             string tishiMsg = "";
             try
             {

@@ -3,12 +3,14 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
+using AngleSharp;
+using AngleSharp.Html.Parser;
 
 namespace c__workspace
 {
     class Spider
     {
-        private string root_dir = "spider\\data\\"; // 数据存储根目录
+        private string root_dir = "Data_Stored\\data\\"; // 数据存储根目录
         public string get_root_dir()
         {
             return this.root_dir;
