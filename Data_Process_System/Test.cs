@@ -10,6 +10,7 @@ namespace c__workspace
             // test_logging();
             // test_spider_write_file();
             test_spider();
+            // test_AngleSharp();
 
         }
 
@@ -39,12 +40,22 @@ namespace c__workspace
             string result = null;
             // result = spider.get_html_from_url("https://weibo.com");
             // Console.WriteLine(result);
-            //string strBaseUrl = "https://m.weibo.cn/api/container/getIndex?type=uid&value=1862317094";
-            string strBaseUrl = "https://www.weibo.com/p/1005051862317094/home?from=page_100505&mod=TAB#place";
+            // string strBaseUrl = "https://m.weibo.cn/api/container/getIndex?type=uid&value=1862317094";
+            string strBaseUrl = "https://weibo.cn/zhouyangqing912?refer_flag=1028035010_&is_hot=1";
             result = spider.get_html_from_url(strBaseUrl);
             // result = spider.test_get_html(strBaseUrl);
             Console.WriteLine(result);
             // spider.parse_html(result);
+
+        }
+
+        static void test_AngleSharp()
+        {
+            var spider = new Spider();
+            // string result = null;
+            //var url = "https://www.weibo.cn/p/1005051862317094/home?from=page_100505&mod=TAB#place";
+            var url = "https://www.weibo.com";
+            spider.using_AngleSharp(url);
 
         }
     }

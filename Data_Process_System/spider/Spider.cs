@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Collections;
+
 using AngleSharp;
 using AngleSharp.Html.Parser;
 
@@ -10,10 +12,39 @@ namespace c__workspace
 {
     class Spider
     {
-        private string root_dir = "Data_Stored\\data\\"; // 数据存储根目录
+        // 数据存储根目录
+        private string root_dir = "Data_Stored\\data\\"; 
+        // Cookie--需自己更新
+        private string cookie_str = "";
+
+        //构造器
+        public Spider()
+        {
+            this.cookie_str = read_cookie("Data_Stored//Cookie");
+        }
         public string get_root_dir()
         {
             return this.root_dir;
+        }
+
+        /// <summary> 读文件，按行读取 </summary>
+        /// <param name="file_path"> 文件路径（含文件名） </param> 
+        /// <returns> 返回读取列表 </returns>
+        public string read_cookie(string file_path)
+        {
+            string result = null;
+            try {
+                StreamReader streamReader = new StreamReader(file_path);
+                string line;
+                while ((line = streamReader.ReadLine()) != null) {
+                    result = line;
+                }
+                streamReader.Close();
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+            return result;
+
         }
 
         /// <summary> 写入文件 </summary>
@@ -60,7 +91,8 @@ namespace c__workspace
                 return file_name;
             }
             splits = url.Split("/");
-            file_name += splits[splits.Length - 1] + ".html";
+            string temp = splits[splits.Length - 1].Replace('?','-');
+            file_name += temp + ".html";
             return file_name;
         }
 
@@ -78,6 +110,8 @@ namespace c__workspace
                 wRequest.UserAgent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
                 wRequest.Method = "POST"; //获取数据的方法
                 wRequest.KeepAlive = true; //保持活性
+                wRequest.ContentType = "application/x-www-form-urlencoded;charset=UTF-8"; // 数据提交方式
+                wRequest.Headers.Add("cookie", this.cookie_str); // Cookie设置
                 // 响应
                 HttpWebResponse wRespond = (HttpWebResponse)wRequest.GetResponse();
                 
@@ -85,7 +119,12 @@ namespace c__workspace
                 Stream respStream = wRespond.GetResponseStream();
                 StreamReader reader = new StreamReader(respStream, encode);
                 string content = reader.ReadToEnd();
-                Console.WriteLine(content);
+                // Console.WriteLine(content);
+
+                if (wRespond.StatusCode != HttpStatusCode.OK)
+                {
+                    Console.WriteLine("不 ok");
+                }
 
                 // 写入文件
                 string file_path = get_file_name(Url);
@@ -105,35 +144,6 @@ namespace c__workspace
             return "";
         }
 
-        public string test_get_html(string url) {
-            HttpWebRequest webReq;
-            HttpWebResponse webResp = null;
-            string Response = "";
-            webReq = (HttpWebRequest)WebRequest.Create(url);
-
-            webReq.AllowAutoRedirect = true; // 自动跳转
-            webReq.ContentType = "application/x-www-form-urlencoded";
-            webReq.Method = "GET";
-            webReq.KeepAlive = true;
-            webResp = (HttpWebResponse)webReq.GetResponse();
-
-            if (webResp.StatusCode == HttpStatusCode.OK)
-            {
-                StreamReader loResponseStream = new StreamReader(webResp.GetResponseStream(), Encoding.UTF8);
-                Response = loResponseStream.ReadToEnd();
-                // 写入文件
-                string file_path = get_file_name(url);
-                string[] splits = url.Split("/");
-                new Connect_to_MySQL().insert(splits[splits.Length - 1], url);
-                write_to_file(file_path, Response);
-            }
-
-            webResp.Close();
-            webResp = null;
-            webReq = null;
-            return Response;
-        }
-
         /// <summary> 解析html网页 </summary>
         /// <param name="html"> 爬取的网页 </param> 
         /// <returns> void </returns>
@@ -148,6 +158,53 @@ namespace c__workspace
                 string match_string = match.Groups["HREF"].Value.ToLower();
                 Console.WriteLine(match_string);
             }
+        }
+    
+        /// <summary> Using AngleSharp </summary>
+        /// <param name="Url"> 请求网页url </param> 
+        /// <returns>  </returns>
+        public void using_AngleSharp(string Url) 
+        {
+            
+            //Use the default configuration for AngleSharp
+            var config = Configuration.Default.WithDefaultLoader();
+
+            //Create a new context for evaluating webpages with the given config
+            var context = BrowsingContext.New(config);
+
+            //Just get the DOM representation
+            // var document = await context.OpenAsync(req => req.Content(url));
+            var document = context.OpenAsync(Url);
+            // Console.WriteLine(document.Result.DocumentElement.OuterHtml);
+            // 写入文件
+            string file_path = get_file_name(Url);
+            string[] splits = Url.Split("/");
+            new Connect_to_MySQL().insert(splits[splits.Length - 1], Url);
+            write_to_file(file_path, document.Result.DocumentElement.OuterHtml);
+
+            var cells = document.Result.QuerySelectorAll(".panel-body li");
+
+            var list = new ArrayList();
+            foreach (var item in cells)
+            {
+                var belle = new Belle
+                {
+                    Title = item.QuerySelector("img").GetAttribute("title"),
+                    ImageUrl = item.QuerySelector("img").GetAttribute("src")
+                };
+                list.Add(belle);
+            }
+            Console.WriteLine(list.Count);
+            foreach (var element in list)
+            {
+                Console.WriteLine(((Belle)element).ImageUrl);
+            }
+
+            // Serialize it back to the console
+            // Console.WriteLine(document.DocumentElement.OuterHtml);
+
+            // write_to_file(this.root_dir + "AngleSharpTest.html", document.);
+
         }
     }
 }
