@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.IO;
+using AngleSharp;
+using AngleSharp.Html.Parser;
 
 namespace c__workspace
 {
@@ -16,32 +18,52 @@ namespace c__workspace
         /// <summary> 读文件，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
         /// <returns> 返回读取列表 </returns>
-        public static ArrayList read_file(string file_path)
+        public static string read_file(string file_path)
         {
-            ArrayList result = new ArrayList();
+            string value = null;
             try {
                 StreamReader streamReader = new StreamReader(file_path);
-                string line;
-                while ((line = streamReader.ReadLine()) != null) {
-                    result.Add(line);
-                }
+                value = streamReader.ReadToEnd();
                 streamReader.Close();
+                streamReader.Dispose();
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
-
-            return result;
-
+            return value;
         }
 
         /// <summary> 解析HTML文件 </summary>
         /// <param name="html_path"> HTML文件路径，含文件名 </param> 
         /// <returns>  </returns>
-        public void parse_html(string html_path)
+        public static void parse_html(string html_path)
         {
-            
+            var page = read_file(html_path);
+            var config = Configuration.Default;
+            var context = BrowsingContext.New(config);
+
+            var parser = context.GetService<IHtmlParser>();
+            // var document = await context.OpenAsync(req => req.Content(page));
+            var document = parser.ParseDocument(page);
+            var elements = document.QuerySelectorAll("a[href]");
+            var post_url_list = new ArrayList();
+            foreach (var item in elements)
+            {
+                var url = item.GetAttribute("href");
+                if (url.Contains("comment") && !url.Contains("https"))
+                {
+                    url = "https://weibo.cn" + url;
+                    post_url_list.Add(url);
+                    Console.WriteLine(url);
+                    Console.WriteLine(item.TextContent);
+                }
+            }
+            Spider spider = new Spider();
+            // spider.parse_html(page);
         }
 
+        /// <summary> 初始化csv文件 </summary>
+        /// <param name="file_name"> 文件名 </param> 
+        /// <returns>  </returns>
         private static void init_csv(string file_name)
         {
             File.Create(file_name);

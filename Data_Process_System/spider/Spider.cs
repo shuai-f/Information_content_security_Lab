@@ -14,7 +14,7 @@ namespace c__workspace
     {
         // 数据存储根目录
         private string root_dir = "Data_Stored\\data\\"; 
-        // Cookie--需自己更新
+        // Cookie--需自己更新,配置文件存储于Data_Stored
         private string cookie_str = "";
 
         //构造器
@@ -151,11 +151,20 @@ namespace c__workspace
         {
             html = Regex.Replace(html, @"<script[^>]*?>.*?</script>", string.Empty, RegexOptions.IgnoreCase);
             string regexString = @"<\s*a\s+[^>]*href\s*=\s*[""'](?<HREF>[^""']*)[""'][^>]*>(?<IHTML>[\s\S]+?)<\s*/\s*a\s*>";
-            Regex regex = new Regex(regexString, RegexOptions.IgnoreCase);
+            // string regexString = "<[Aa]\\s*href\\s*=\\s*'.+?'>.+?</[Aa]>";
+            Regex regex = new Regex(regexString);
             MatchCollection matchs = regex.Matches(html);
             foreach (Match match in matchs)
             {
                 string match_string = match.Groups["HREF"].Value.ToLower();
+                if (match_string.Contains("comment"))
+                {
+                    if (!match_string.Contains("https"))
+                    {
+                        match_string = "https://weibo.cn" + match_string;
+                        Console.WriteLine(match_string);
+                    }
+                }
                 Console.WriteLine(match_string);
             }
         }

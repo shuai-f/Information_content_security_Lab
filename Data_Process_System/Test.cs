@@ -9,8 +9,9 @@ namespace c__workspace
             // test_connect();
             // test_logging();
             // test_spider_write_file();
-            test_spider();
+            // test_spider();
             // test_AngleSharp();
+            test_parser_html();
 
         }
 
@@ -29,7 +30,7 @@ namespace c__workspace
         static void test_spider_write_file()
         {
             string data = null;
-            string file_path = "spider/data/test.txt";
+            string file_path = "Data_Stored/data/test.txt";
             Spider spider = new Spider();
             spider.write_to_file(file_path, data);
         }
@@ -54,9 +55,15 @@ namespace c__workspace
             var spider = new Spider();
             // string result = null;
             //var url = "https://www.weibo.cn/p/1005051862317094/home?from=page_100505&mod=TAB#place";
-            var url = "https://www.weibo.com";
+            var url = "https://weibo.cn/zhouyangqing912?refer_flag=1028035010_&is_hot=1";
             spider.using_AngleSharp(url);
 
+        }
+
+        static void test_parser_html()
+        {
+            var html_path = @"C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\Data_Stored\data\zhouyangqing912-refer_flag=1028035010_&is_hot=1.html";
+            Data_Process.parse_html(html_path);
         }
     }
 }
