@@ -172,6 +172,34 @@ namespace c__workspace
 
         }
 
+        /// <summary> 关键字搜索 </summary>
+        /// <param name="keyword">  </param> 
+        /// <returns>  </returns>
+        public void search_for_keyword(string keyword)
+        {
+            // find in SQL
+
+            // construct url by keyword
+            var queue = new Queue();
+            for (int i = 0; i < 10; i++)
+            {
+                var temp_url = "";
+                queue.Enqueue(temp_url);
+            }
+            while(queue.Count != 0)
+            {
+                string cur_url = (string)queue.Dequeue();
+                Console.WriteLine(cur_url);
+                get_html_from_url(cur_url);
+                var html_path = get_file_name(cur_url); // 获取报文存储路径
+                var temp_list = Data_Process.parse_html(html_path);
+                foreach (string item in temp_list)
+                {
+                    get_html_from_url(item);
+                    Data_Process.get_post(item, get_file_name(item));
+                }
+            }
+        }
 
 
         /// <summary> 解析html网页 </summary>

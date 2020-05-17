@@ -12,8 +12,8 @@ namespace c__workspace
             // test_spider();
             // test_AngleSharp();
             // test_parser_html();
-            // test_do_crawl();
-            test_get_post();
+            test_do_crawl();
+            // test_get_post();
 
         }
 
@@ -79,7 +79,7 @@ namespace c__workspace
         static void test_do_crawl()
         {
             var spider = new Spider();
-            var url = "https://weibo.cn/luozhixiang";
+            var url = "https://weibo.cn/zhouyangqing912";
             spider.do_crawl(url);
         }
     }

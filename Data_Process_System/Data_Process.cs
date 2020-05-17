@@ -11,7 +11,7 @@ namespace c__workspace
     class Data_Process
     {
         static string[] list = { "ID", "主题", "博文", "日期", "URL", "点赞数", "评论数", "转发数" };
-            
+        static string file_name = "Data_Stored//post.csv";
         public void package_store(string package)
         {
             
@@ -94,6 +94,7 @@ namespace c__workspace
             post.content = document.QuerySelector("span.ctt").TextContent;
             post.date = document.QuerySelector("span.ct").TextContent;
             var elements = document.QuerySelectorAll("div");
+            var flag = true;
             foreach (var item in elements)
             {
                 string content = item.TextContent;
@@ -105,9 +106,12 @@ namespace c__workspace
                     post.trans_count = matchs[0].Value;
                     post.comment_count = matchs[1].Value;
                     post.good_count = matchs[2].Value;
+                    flag = false;
                     break;
                 }
             }
+            if (flag)
+                return;
             post.subject = "需对正文做字符串匹配，暂时理解为关键字";
             if (store_to_csv(post_to_arraylist(post)))
             {
@@ -144,27 +148,27 @@ namespace c__workspace
         }
 
         /// <summary> 博文存储为csv文件 </summary>
-        /// <param name="list"> 写入参数Arraylist<Arraylist<>> </param> 
+        /// <param name="list"> 写入参数Arraylist<String> </param> 
         /// <returns>  </returns>
         public static Boolean store_to_csv(ArrayList list)
         {
             try
             {
-                string file_name = "Data_Stored//post.csv";
                 if (!File.Exists(file_name))
                 {
                     init_csv(file_name);
                 }
                 var sw = new StreamWriter(new FileStream(file_name,FileMode.Append),System.Text.Encoding.UTF8);
-                if (list.Count != Data_Process.list.Length)
+                if (list.Count != Data_Process.list.Length) // 参数检查
                 {
                     Console.WriteLine("写入csv文件:参数不对");
                     Console.WriteLine(list.ToString());
                     return false;
                 }
-                foreach (var item in list)
+                foreach (var item in list) //写入一行
                 {
                     // Console.WriteLine(item);
+                    // 判断是否为最后一行
                     if (list.Count == list.IndexOf(item) + 1)
                     {
                         sw.Write(item + "\r\n");
@@ -180,6 +184,51 @@ namespace c__workspace
             {
                 throw;
             }
+        }
+    
+        /// <summary> 读取csv文件 </summary>
+        /// <param name="">  </param> 
+        /// <returns> post_list </returns>
+        public static ArrayList read_from_csv()
+        {
+            var list = new ArrayList();
+            FileStream fs = new FileStream(file_name, FileMode.Open, FileAccess.Read);
+ 
+            //StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);  
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.Default);
+            //记录每行记录中的各字段内容  
+            string[] aryLine = null;
+            //标示是否是读取的第一行  
+            bool IsFirst = true;
+            var strLine = "";
+            //逐行读取CSV中的数据  
+            while ((strLine = sr.ReadLine()) != null)
+            {
+                aryLine = strLine.Split(',');
+                if (IsFirst)
+                {
+                    IsFirst = false;
+                }
+                else
+                {
+                    var post = new Post();
+                    int i = 0;
+                    post.id = aryLine[i++];
+                    post.subject = aryLine[i++];
+                    post.content = aryLine[i++];
+                    post.date = aryLine[i++];
+                    post.url = aryLine[i++];
+                    post.good_count = aryLine[i++];
+                    post.comment_count = aryLine[i++];
+                    post.trans_count = aryLine[i++];
+                    list.Add(post);
+                }
+ 
+            }
+ 
+            sr.Close();
+            fs.Close();
+            return list;
         }
     }
 }
