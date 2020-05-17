@@ -11,7 +11,9 @@ namespace c__workspace
             // test_spider_write_file();
             // test_spider();
             // test_AngleSharp();
-            test_parser_html();
+            // test_parser_html();
+            // test_do_crawl();
+            test_get_post();
 
         }
 
@@ -39,10 +41,8 @@ namespace c__workspace
         {
             Spider spider = new Spider();
             string result = null;
-            // result = spider.get_html_from_url("https://weibo.com");
-            // Console.WriteLine(result);
-            // string strBaseUrl = "https://m.weibo.cn/api/container/getIndex?type=uid&value=1862317094";
-            string strBaseUrl = "https://weibo.cn/zhouyangqing912?refer_flag=1028035010_&is_hot=1";
+            // string strBaseUrl = "https://weibo.cn/zhouyangqing912?refer_flag=1028035010_&is_hot=1";
+            string strBaseUrl = "https://weibo.cn/comment/J1CBvFHhf?ckAll=1";
             result = spider.get_html_from_url(strBaseUrl);
             // result = spider.test_get_html(strBaseUrl);
             Console.WriteLine(result);
@@ -62,8 +62,25 @@ namespace c__workspace
 
         static void test_parser_html()
         {
-            var html_path = @"C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\Data_Stored\data\zhouyangqing912-refer_flag=1028035010_&is_hot=1.html";
+            var spider = new Spider();
+            string url = "https://weibo.cn/comment/J1CBvFHhf?ckAll=1";
+            var html_path = spider.get_file_name(url);
             Data_Process.parse_html(html_path);
+        }
+
+        static void test_get_post()
+        {
+            var spider = new Spider();
+            string url = "https://weibo.cn/comment/J1CBvFHhf?ckAll=1";
+            var html_path = spider.get_file_name(url);
+            Data_Process.get_post(url,html_path);
+        }
+
+        static void test_do_crawl()
+        {
+            var spider = new Spider();
+            var url = "https://weibo.cn/luozhixiang";
+            spider.do_crawl(url);
         }
     }
 }

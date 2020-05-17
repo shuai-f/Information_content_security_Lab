@@ -27,7 +27,7 @@ namespace c__workspace
             return this.root_dir;
         }
 
-        /// <summary> 读文件，按行读取 </summary>
+        /// <summary> 辅助：读取cookie，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
         /// <returns> 返回读取列表 </returns>
         public string read_cookie(string file_path)
@@ -47,7 +47,7 @@ namespace c__workspace
 
         }
 
-        /// <summary> 写入文件 </summary>
+        /// <summary> 辅助：写入文件 </summary>
         /// <param name="file_path"> 文件存储路径 </param> 
         /// <param name="data"> 报文/数据 </param> 
         /// <returns> 成功返回True </returns>
@@ -78,7 +78,7 @@ namespace c__workspace
             return true;
         }
 
-        /// <summary> 辅助函数：获取写入文件文件名 </summary>
+        /// <summary> 辅助：获取写入文件文件名 </summary>
         /// <param name="url"> url </param> 
         /// <returns> file_name </returns>
         public string get_file_name(string url)
@@ -143,6 +143,36 @@ namespace c__workspace
             }
             return "";
         }
+
+        /// <summary> 执行爬虫 </summary>
+        /// <param name="start_url"> 起始url </param> 
+        /// <returns>  </returns>
+        public void do_crawl(string start_url)
+        {
+            var queue = new Queue();
+            queue.Enqueue(start_url);
+            while(queue.Count != 0)
+            {
+                string cur_url = (string)queue.Dequeue();
+                Console.WriteLine(cur_url);
+                get_html_from_url(cur_url);
+                var html_path = get_file_name(cur_url);
+                if (cur_url.Equals(start_url))
+                {
+                    var list = Data_Process.parse_html(html_path);
+                    foreach (string item in list)
+                    {
+                        if (queue.Contains(item))
+                            continue;
+                        queue.Enqueue(item);
+                    }
+                }
+                Data_Process.get_post(cur_url, html_path);
+            }
+
+        }
+
+
 
         /// <summary> 解析html网页 </summary>
         /// <param name="html"> 爬取的网页 </param> 
