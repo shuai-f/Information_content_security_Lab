@@ -169,13 +169,12 @@ namespace c__workspace
                 }
                 for (int i = 0; i < list.Count;i++) //写入一行
                 {
-                    var item = list.GetRange(i, 1)[0];
+                    var item = list[i];
                     item = ((string)item).Replace(",", "，");
                     // 判断是否为最后一行
                     if (i == list.Count-1)
                     {
                         sw.Write(item + "\r\n");
-                        continue;
                     }
                     sw.Write(item + ",");
                 }
@@ -302,7 +301,7 @@ namespace c__workspace
 				json_text += sr.ReadLine();
 			}
 			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
-            // new Spider().write_to_file("Data_Stored//json_test.json", jo.ToString());
+            // new Spider().write_to_file("Data_Stored//json//json_test.json", jo.ToString());
             var item = jo["data"];
             int count = 0;
             foreach (var temp in item["cards"][0]["card_group"])
