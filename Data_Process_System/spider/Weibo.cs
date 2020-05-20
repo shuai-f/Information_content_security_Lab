@@ -23,6 +23,13 @@ namespace c__workspace
         public string good_count{ get; set; }
         public string comment_count{ get; set; }
         public string trans_count{ get; set; }
+        
+        public string view_attributes()
+        {
+            string result = $"id={id};\nsubject={subject};\ncontent={content};\n"
+                + $"date={date};\nurl={url};\ngood={good_count};\ncomments={comment_count};\ntrans={trans_count};\n";
+            return result;
+        }
     }
 
 }

@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using AngleSharp;
 using AngleSharp.Html.Parser;
@@ -165,11 +167,12 @@ namespace c__workspace
                     Console.WriteLine(list.ToString());
                     return false;
                 }
-                foreach (var item in list) //写入一行
+                for (int i = 0; i < list.Count;i++) //写入一行
                 {
-                    // Console.WriteLine(item);
+                    var item = list.GetRange(i, 1)[0];
+                    item = ((string)item).Replace(",", "，");
                     // 判断是否为最后一行
-                    if (list.Count == list.IndexOf(item) + 1)
+                    if (i == list.Count-1)
                     {
                         sw.Write(item + "\r\n");
                         continue;
@@ -229,6 +232,104 @@ namespace c__workspace
             sr.Close();
             fs.Close();
             return list;
+        }
+
+        /// <summary> 时间处理 </summary>
+        /// <param name="original_time"> 解析出的时间 </param> 
+        /// <returns> 处理后的博文内容 </returns>
+        public static string time_handler(string original_time)
+        {
+            var current_time = original_time;
+            string[] units = { "年", "月", "天", "时", "分钟", "秒" };
+
+            foreach(var unit in units)
+            {
+                if (!original_time.Contains(unit))
+                    continue;
+                var splits = original_time.Split(unit); // 11分钟前
+                // Console.WriteLine(original_time);
+                int timespan = -(int.Parse(splits[0]));
+                switch (unit)
+                {
+                    case "天":
+                        current_time = DateTime.Now.AddYears(timespan).ToString();
+                        break;
+                    case "月":
+                        current_time = DateTime.Now.AddMonths(timespan).ToString();
+                        break;
+                    case "日":
+                        current_time = DateTime.Now.AddDays(timespan).ToString();
+                        break;
+                    case "时":
+                        current_time = DateTime.Now.AddHours(timespan).ToString();
+                        break;
+                    case "分钟":
+                        current_time = DateTime.Now.AddMinutes(timespan).ToString();
+                        break;
+                    case "秒":
+                        current_time = DateTime.Now.AddSeconds(timespan).ToString();
+                        break;
+                }
+                break;
+            }
+            return current_time;
+        }
+        
+        /// <summary> 文章处理 </summary>
+        /// <param name="original_content"> 解析出的博文内容 </param> 
+        /// <returns> 处理后的博文内容 </returns>
+        public static string content_handler(string original_content)
+        {
+            var current_content = original_content;
+            var config = Configuration.Default;
+            var context = BrowsingContext.New(config);
+            var parser = context.GetService<IHtmlParser>();
+            var document = parser.ParseDocument(original_content);
+            var value = document.QuerySelector("body");
+            current_content = value.TextContent;
+            return current_content;
+        }
+
+        /// <summary> 读取Json文件 </summary>
+        /// <param name="file_path"> 文件存储路径 </param> 
+        /// <returns> JObject </returns>
+        public static JObject get_Json(string file_path)
+        {
+			StreamReader sr = new StreamReader(file_path);
+            //存储json文本
+			string json_text = "";
+			while (!sr.EndOfStream) {
+				json_text += sr.ReadLine();
+			}
+			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
+            // new Spider().write_to_file("Data_Stored//json_test.json", jo.ToString());
+            var item = jo["data"];
+            int count = 0;
+            foreach (var temp in item["cards"][0]["card_group"])
+            {
+                if (!temp["card_type"].ToString().Contains("9")) 
+                {
+                    continue;
+                }
+                var post = new Post();
+                var blog = temp["mblog"];
+                post.content = content_handler(blog["text"].ToString()); // content
+                post.trans_count = blog["reposts_count"].ToString();
+                post.comment_count = blog["comments_count"].ToString();
+                post.good_count = blog["attitudes_count"].ToString();
+                post.date = time_handler(blog["created_at"].ToString());
+                post.id = blog["user"]["id"].ToString();
+                post.subject = blog["source"].ToString(); // 需要修改
+                post.url = temp["scheme"].ToString(); // url
+                // Console.WriteLine(post.view_attributes());
+                if (store_to_csv(post_to_arraylist(post)))
+                {
+                    // Console.WriteLine("stored successfully");
+                }
+                count++;
+            }
+            Console.WriteLine(count);
+            return jo;
         }
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DWams7n2l9tyaaOZBVPrABbScZjfGShtaD7JHaitz8718SiLYD+PwtkrBFATmWI6LMAbMoYZaxymGQrt1490zA==",
+  "dgSpecHash": "zG+XaVjlVAUna1/ynWD2rkODpOcO2idaqCsCWhl9WHMepOJ5l5MyPjJZhH6TllxEykjxdSEYEarLDyLKTIl8Zg==",
   "success": true,
   "projectFilePath": "C:\\Users\\冯帅\\Desktop\\Information_content_security_Lab\\Data_Process_System\\Data_Process_System.csproj",
   "expectedPackageFiles": [
@@ -17,6 +17,7 @@
     "C:\\Users\\冯帅\\.nuget\\packages\\microsoft.win32.systemevents\\4.6.0\\microsoft.win32.systemevents.4.6.0.nupkg.sha512",
     "C:\\Users\\冯帅\\.nuget\\packages\\mysql.data\\8.0.20\\mysql.data.8.0.20.nupkg.sha512",
     "C:\\Users\\冯帅\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
+    "C:\\Users\\冯帅\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
     "C:\\Users\\冯帅\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\冯帅\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\冯帅\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

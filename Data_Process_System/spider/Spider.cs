@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using AngleSharp;
 using AngleSharp.Html.Parser;
 
@@ -172,19 +175,32 @@ namespace c__workspace
 
         }
 
+        private string LanChange(string str)
+        {
+            Encoding utf8;
+            Encoding gb2312;
+            utf8 = Encoding.GetEncoding("UTF-8");
+            gb2312 = Encoding.GetEncoding("GB2312");
+            byte[] gb = gb2312.GetBytes(str);
+            gb = Encoding.Convert(gb2312,utf8,gb);
+            return utf8.GetString(gb);
+        }
+
         /// <summary> 关键字搜索 </summary>
-        /// <param name="keyword">  </param> 
+        /// <param name="keyword"> keyword </param> 
+        /// <param name="n"> page_num </param> 
         /// <returns>  </returns>
-        public void search_for_keyword(string keyword)
+        public void search_for_keyword(string keyword,int n)
         {
             // find in SQL
 
             // construct url by keyword
+            // https://s.weibo.com/weibo/keyword
             var queue = new Queue();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < n; i++)
             {
-                var temp_url = "";
-                queue.Enqueue(temp_url);
+                string url = $"https://m.weibo.cn/api/container/getIndex?type=wb&queryVal={keyword}&containerid=100103type=2%26q%3D{keyword}&page={i}";
+                queue.Enqueue(url);
             }
             while(queue.Count != 0)
             {
@@ -192,11 +208,14 @@ namespace c__workspace
                 Console.WriteLine(cur_url);
                 get_html_from_url(cur_url);
                 var html_path = get_file_name(cur_url); // 获取报文存储路径
+                var jo = Data_Process.get_Json(html_path);
                 var temp_list = Data_Process.parse_html(html_path);
                 foreach (string item in temp_list)
                 {
+                    Console.WriteLine(item);
                     get_html_from_url(item);
-                    Data_Process.get_post(item, get_file_name(item));
+                    jo = Data_Process.get_Json(get_file_name(item));
+                    // Data_Process.get_post(item, get_file_name(item));
                 }
             }
         }
