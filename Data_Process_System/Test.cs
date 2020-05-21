@@ -113,7 +113,7 @@ namespace c__workspace
         public static void test_keyword_search()
         {
             var spider = new Spider();
-            var keyword = "关键字";
+            var keyword = "计算机";
             spider.search_for_keyword(keyword,1);
         }
     }

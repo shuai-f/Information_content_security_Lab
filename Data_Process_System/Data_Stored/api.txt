@@ -1,0 +1,6 @@
+https://m.weibo.cn/api/comments/show?id={id}&page={page}
+https://m.weibo.cn/api/container/getIndex?containerid={oid}&type=uid&value={uid}&page={page}
+https://m.weibo.cn/api/container/getIndex?type=uid&value={usr_id}
+
+获取用户信息
+https://m.weibo.cn/api/container/getIndex?uid={uid}&type=uid&value={uid}&containerid=100505{uid}

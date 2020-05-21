@@ -169,12 +169,16 @@ namespace c__workspace
                 }
                 for (int i = 0; i < list.Count;i++) //写入一行
                 {
-                    var item = list[i];
-                    item = ((string)item).Replace(",", "，");
+                    string item = (string)list[i];
+                    if (item.Contains(","))
+                        item = item.Replace(",", "，");
+                    if (item.Contains("\n"))
+                        item = item.Replace("\n", "--换行--");
                     // 判断是否为最后一行
                     if (i == list.Count-1)
                     {
                         sw.Write(item + "\r\n");
+                        continue;
                     }
                     sw.Write(item + ",");
                 }
@@ -239,8 +243,9 @@ namespace c__workspace
         public static string time_handler(string original_time)
         {
             var current_time = original_time;
-            string[] units = { "年", "月", "天", "时", "分钟", "秒" };
-
+            string[] units = { "年", "月", "天", "时", "分钟", "秒"};
+            if (current_time.Contains("刚刚"))
+                return DateTime.Now.ToString();
             foreach(var unit in units)
             {
                 if (!original_time.Contains(unit))
@@ -276,9 +281,11 @@ namespace c__workspace
         
         /// <summary> 文章处理 </summary>
         /// <param name="original_content"> 解析出的博文内容 </param> 
+        /// <param name="choice"> 1.浅处理--json解析出来的内容处理、 2.精处理--原始html网页 </param>
         /// <returns> 处理后的博文内容 </returns>
         public static string content_handler(string original_content)
         {
+
             var current_content = original_content;
             var config = Configuration.Default;
             var context = BrowsingContext.New(config);
@@ -286,6 +293,27 @@ namespace c__workspace
             var document = parser.ParseDocument(original_content);
             var value = document.QuerySelector("body");
             current_content = value.TextContent;
+            // if (current_content.Contains("...全文-"))
+            // {
+            //     foreach (var item in document.QuerySelectorAll("a[href]"))
+            //     {
+            //         string href = item.GetAttribute("href");
+            //         if (href.Contains("status"))
+            //         {
+            //             var id = href.Split(@"/status/")[0];
+            //             var url = $"https://m.weibo.cn/statuses/extend?id={id}";
+
+            //             // var html_page = new Spider().get_html_from_url(url);
+            //             // document = parser.ParseDocument(html_page);
+            //             // var json_text = document.QuerySelector("body > script").TextContent;
+            //             var json_text = new Spider().get_html_from_url(url);
+            //             Console.WriteLine(json_text);
+            //             JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
+            //             document = parser.ParseDocument(jo["text"].ToString());
+            //             current_content = document.QuerySelector("body").TextContent;
+            //         }
+            //     }
+            // }
             return current_content;
         }
 
@@ -312,14 +340,17 @@ namespace c__workspace
                 }
                 var post = new Post();
                 var blog = temp["mblog"];
-                post.content = content_handler(blog["text"].ToString()); // content
+                post.url = temp["scheme"].ToString(); // url
+                if (((JObject)blog).Property("longText") != null)
+                    post.content = blog["longText"]["longTextContent"].ToString(); // content
+                else
+                    post.content = content_handler(blog["text"].ToString());
                 post.trans_count = blog["reposts_count"].ToString();
                 post.comment_count = blog["comments_count"].ToString();
                 post.good_count = blog["attitudes_count"].ToString();
                 post.date = time_handler(blog["created_at"].ToString());
                 post.id = blog["user"]["id"].ToString();
                 post.subject = blog["source"].ToString(); // 需要修改
-                post.url = temp["scheme"].ToString(); // url
                 // Console.WriteLine(post.view_attributes());
                 if (store_to_csv(post_to_arraylist(post)))
                 {
