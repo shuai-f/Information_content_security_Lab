@@ -14,12 +14,14 @@ namespace c__workspace
             // Test_Spider.test_spider();
             // Test_Spider.test_AngleSharp();
             // Test_Spider.test_do_crawl();
-            Test_Spider.test_keyword_search();
+            // Test_Spider.test_keyword_search();
+            // Test_Spider.test_get_comments();
+            Test_Spider.test_topic_track();
 
             // Test_Data_Process.test_get_post();
             // Test_Data_Process.test_parser_html();
             // Test_Data_Process.test_get_Json();
-
+            // Test_Data_Process.test_read_from_csv();
 
         }
 
@@ -45,6 +47,7 @@ namespace c__workspace
             Data_Process.get_post(url,html_path);
         }
 
+        /// <summary> 测试Jobject </summary>
         public static void test_get_Json()
         {
             var spider = new Spider();
@@ -53,6 +56,16 @@ namespace c__workspace
             var html_path = spider.get_file_name(url);
             Data_Process.get_Json(html_path);
 
+        }
+
+        /// <summary> 测试读取csv文件 </summary>
+        public static void test_read_from_csv()
+        {
+            var results = Data_Process.read_from_csv();
+            foreach (Post post in results)
+            {
+                Console.WriteLine(post.view_attributes());
+            }
         }
     }
 
@@ -113,8 +126,25 @@ namespace c__workspace
         public static void test_keyword_search()
         {
             var spider = new Spider();
-            var keyword = "计算机";
-            spider.search_for_keyword(keyword,1);
+            var keyword = "猫";
+            spider.search_for_keyword(keyword,3);
+        }
+
+        /// <summary> 测试获取微博评论 </summary>
+        public static void test_get_comments()
+        {
+            var id = "4506444609948328";
+            var page = 1;
+            var spider = new Spider();
+            spider.search_comments(id, page);
+        }
+
+        /// <summary> 测试热点话题追踪 </summary>
+        public static void test_topic_track()
+        {
+            var topic = "";
+            var spider = new Spider();
+            spider.topic_track(topic);
         }
     }
 
@@ -123,9 +153,8 @@ namespace c__workspace
         /// <summary> 测试连接数据库 </summary>
         public static void test_connect()
         {
-            Connect_to_MySQL connect = new Connect_to_MySQL();
             // connect.insert("keyword", "10241");
-            connect.select_by_keyword("keyword");
+            Connect_to_MySQL.select_by_keyword("keyword");
         }
     }
 }

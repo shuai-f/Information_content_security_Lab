@@ -13,6 +13,7 @@ namespace c__workspace
     class Data_Process
     {
         static string[] list = { "ID", "主题", "博文", "日期", "URL", "点赞数", "评论数", "转发数" };
+        // static string[] topic_column = { "话题", "描述",}
         static string file_name = "Data_Stored//post.csv";
         public void package_store(string package)
         {
@@ -117,7 +118,7 @@ namespace c__workspace
             post.subject = "需对正文做字符串匹配，暂时理解为关键字";
             if (store_to_csv(post_to_arraylist(post)))
             {
-                Console.WriteLine("stored successfully");
+                Logging.AddLog("Add one post to csv");
             }
         }
 
@@ -207,16 +208,18 @@ namespace c__workspace
             //标示是否是读取的第一行  
             bool IsFirst = true;
             var strLine = "";
+            int count = 0;
             //逐行读取CSV中的数据  
             while ((strLine = sr.ReadLine()) != null)
             {
-                aryLine = strLine.Split(',');
+                aryLine = strLine.Split(",");
                 if (IsFirst)
                 {
                     IsFirst = false;
                 }
                 else
                 {
+                    count++;
                     var post = new Post();
                     int i = 0;
                     post.id = aryLine[i++];
@@ -231,7 +234,8 @@ namespace c__workspace
                 }
  
             }
- 
+            Logging.AddLog($"Read Post data successfully! Total count : {count}条");
+            Console.WriteLine($"共取出数据，{count}条");
             sr.Close();
             fs.Close();
             return list;
@@ -243,7 +247,7 @@ namespace c__workspace
         public static string time_handler(string original_time)
         {
             var current_time = original_time;
-            string[] units = { "年", "月", "天", "时", "分钟", "秒"};
+            string[] units = { "年", "月", "天", "小时", "分钟", "秒"};
             if (current_time.Contains("刚刚"))
                 return DateTime.Now.ToString();
             foreach(var unit in units)
@@ -264,7 +268,7 @@ namespace c__workspace
                     case "日":
                         current_time = DateTime.Now.AddDays(timespan).ToString();
                         break;
-                    case "时":
+                    case "小时":
                         current_time = DateTime.Now.AddHours(timespan).ToString();
                         break;
                     case "分钟":
@@ -281,7 +285,6 @@ namespace c__workspace
         
         /// <summary> 文章处理 </summary>
         /// <param name="original_content"> 解析出的博文内容 </param> 
-        /// <param name="choice"> 1.浅处理--json解析出来的内容处理、 2.精处理--原始html网页 </param>
         /// <returns> 处理后的博文内容 </returns>
         public static string content_handler(string original_content)
         {
@@ -317,19 +320,8 @@ namespace c__workspace
             return current_content;
         }
 
-        /// <summary> 读取Json文件 </summary>
-        /// <param name="file_path"> 文件存储路径 </param> 
-        /// <returns> JObject </returns>
-        public static JObject get_Json(string file_path)
+        public static void post_stored(JObject jo)
         {
-			StreamReader sr = new StreamReader(file_path);
-            //存储json文本
-			string json_text = "";
-			while (!sr.EndOfStream) {
-				json_text += sr.ReadLine();
-			}
-			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
-            // new Spider().write_to_file("Data_Stored//json//json_test.json", jo.ToString());
             var item = jo["data"];
             int count = 0;
             foreach (var temp in item["cards"][0]["card_group"])
@@ -349,16 +341,67 @@ namespace c__workspace
                 post.comment_count = blog["comments_count"].ToString();
                 post.good_count = blog["attitudes_count"].ToString();
                 post.date = time_handler(blog["created_at"].ToString());
-                post.id = blog["user"]["id"].ToString();
+                post.id = blog["id"].ToString();
                 post.subject = blog["source"].ToString(); // 需要修改
                 // Console.WriteLine(post.view_attributes());
                 if (store_to_csv(post_to_arraylist(post)))
                 {
-                    // Console.WriteLine("stored successfully");
+                    Logging.AddLog("Add one post to csv successfully.");
                 }
                 count++;
             }
             Console.WriteLine(count);
+        }
+
+        public static void topic_stored(JObject jo)
+        {
+            var item = jo["data"];
+            int count = 0;
+            string topic = $"#{item["cardlistInfo"]["cardlist_title"].ToString()}#";
+
+            foreach (var temp in item["cards"])
+            {
+                if (!temp["card_type"].ToString().Contains("9")) 
+                {
+                    continue;
+                }
+                var post = new Post();
+                var blog = temp["mblog"];
+                post.url = temp["scheme"].ToString(); // url
+                if (((JObject)blog).Property("longText") != null)
+                    post.content = blog["longText"]["longTextContent"].ToString(); // content
+                else
+                    post.content = content_handler(blog["text"].ToString());
+                post.trans_count = blog["reposts_count"].ToString();
+                post.comment_count = blog["comments_count"].ToString();
+                post.good_count = blog["attitudes_count"].ToString();
+                post.date = time_handler(blog["created_at"].ToString());
+                post.id = blog["id"].ToString();
+                post.subject = topic; // 需要修改
+                // Console.WriteLine(post.view_attributes());
+                if (store_to_csv(post_to_arraylist(post)))
+                {
+                    Logging.AddLog("Add one post to csv successfully.");
+                }
+                count++;
+            }
+            Console.WriteLine(count);
+        }
+        /// <summary> 读取Json文件 </summary>
+        /// <param name="file_path"> 文件存储路径 </param> 
+        /// <returns> JObject </returns>
+        public static JObject get_Json(string file_path)
+        {
+			StreamReader sr = new StreamReader(file_path);
+            var splits = file_path.Split(@"\");
+            file_path = splits[splits.Length - 1];
+            //存储json文本
+            string json_text = "";
+			while (!sr.EndOfStream) {
+				json_text += sr.ReadLine();
+			}
+			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
+            // new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
             return jo;
         }
     }

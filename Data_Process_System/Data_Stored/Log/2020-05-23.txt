@@ -1,0 +1,80 @@
+2020-05-23 15:03:10.178,[Exception]:The SSL connection could not be established, see inner exception. Authentication failed because the remote party has closed the transport stream.
+2020-05-23 15:08:23.580,insert successfully.
+2020-05-23 15:08:23.582,Wtite to file successfully.
+2020-05-23 15:08:23.585,Crawl page successfully！
+2020-05-23 15:08:23.825,Add one post to csv successfully.
+2020-05-23 15:08:23.828,Add one post to csv successfully.
+2020-05-23 15:08:23.831,Add one post to csv successfully.
+2020-05-23 15:08:23.845,Add one post to csv successfully.
+2020-05-23 15:08:23.847,Add one post to csv successfully.
+2020-05-23 15:08:23.849,Add one post to csv successfully.
+2020-05-23 15:08:23.851,Add one post to csv successfully.
+2020-05-23 15:08:23.853,Add one post to csv successfully.
+2020-05-23 15:08:23.855,Add one post to csv successfully.
+2020-05-23 15:08:23.858,Add one post to csv successfully.
+2020-05-23 15:08:34.108,insert successfully.
+2020-05-23 15:08:34.114,Wtite to file successfully.
+2020-05-23 15:08:34.122,Crawl page successfully！
+2020-05-23 15:08:34.152,Add one post to csv successfully.
+2020-05-23 15:08:34.154,Add one post to csv successfully.
+2020-05-23 15:08:34.156,Add one post to csv successfully.
+2020-05-23 15:08:34.158,Add one post to csv successfully.
+2020-05-23 15:08:34.160,Add one post to csv successfully.
+2020-05-23 15:08:34.162,Add one post to csv successfully.
+2020-05-23 15:08:34.163,Add one post to csv successfully.
+2020-05-23 15:08:34.166,Add one post to csv successfully.
+2020-05-23 15:08:34.167,Add one post to csv successfully.
+2020-05-23 15:08:34.169,Add one post to csv successfully.
+2020-05-23 15:08:45.351,insert successfully.
+2020-05-23 15:08:45.354,Wtite to file successfully.
+2020-05-23 15:08:45.358,Crawl page successfully！
+2020-05-23 15:08:45.372,Add one post to csv successfully.
+2020-05-23 15:08:45.374,Add one post to csv successfully.
+2020-05-23 15:08:45.376,Add one post to csv successfully.
+2020-05-23 15:08:45.378,Add one post to csv successfully.
+2020-05-23 15:08:45.380,Add one post to csv successfully.
+2020-05-23 15:08:45.382,Add one post to csv successfully.
+2020-05-23 15:08:45.384,Add one post to csv successfully.
+2020-05-23 15:08:45.386,Add one post to csv successfully.
+2020-05-23 15:08:45.388,Add one post to csv successfully.
+2020-05-23 15:08:45.391,Add one post to csv successfully.
+2020-05-23 21:34:55.137,Wtite to file successfully.
+2020-05-23 21:34:55.139,Crawl page successfully！
+2020-05-23 21:49:50.224,Wtite to file successfully.
+2020-05-23 21:49:50.226,Crawl page successfully！
+2020-05-23 21:55:12.702,Wtite to file successfully.
+2020-05-23 21:55:12.704,Crawl page successfully！
+2020-05-23 21:58:13.768,Wtite to file successfully.
+2020-05-23 21:58:13.769,Crawl page successfully！
+2020-05-23 21:58:59.106,Wtite to file successfully.
+2020-05-23 21:58:59.108,Crawl page successfully！
+2020-05-23 21:59:42.972,Wtite to file successfully.
+2020-05-23 21:59:42.974,Crawl page successfully！
+2020-05-23 21:59:43.220,Wtite to file successfully.
+2020-05-23 22:59:16.533,Wtite to file successfully.
+2020-05-23 22:59:16.535,Crawl page successfully！
+2020-05-23 23:04:53.163,Wtite to file successfully.
+2020-05-23 23:04:53.165,Crawl page successfully！
+2020-05-23 23:06:48.298,Wtite to file successfully.
+2020-05-23 23:06:48.301,Crawl page successfully！
+2020-05-23 23:08:15.385,Wtite to file successfully.
+2020-05-23 23:08:15.387,Crawl page successfully！
+2020-05-23 23:09:20.384,Wtite to file successfully.
+2020-05-23 23:09:20.387,Crawl page successfully！
+2020-05-23 23:09:39.712,Wtite to file successfully.
+2020-05-23 23:09:39.714,Crawl page successfully！
+2020-05-23 23:09:39.830,Wtite to file successfully.
+2020-05-23 23:20:54.883,Crawl page successfully！
+2020-05-23 23:28:50.087,Crawl page successfully！
+2020-05-23 23:35:12.293,Wtite to file successfully.
+2020-05-23 23:35:12.296,Crawl page successfully！
+2020-05-23 23:35:12.367,Wtite to file successfully.
+2020-05-23 23:54:22.470,Wtite to file successfully.
+2020-05-23 23:54:22.474,Crawl page successfully！
+2020-05-23 23:54:22.562,Wtite to file successfully.
+2020-05-23 23:56:18.610,Wtite to file successfully.
+2020-05-23 23:56:18.612,Crawl page successfully！
+2020-05-23 23:56:18.684,Wtite to file successfully.
+2020-05-23 23:56:18.836,Wtite to file successfully.
+2020-05-23 23:56:18.837,Crawl page successfully！
+2020-05-23 23:56:18.840,Wtite to file successfully.

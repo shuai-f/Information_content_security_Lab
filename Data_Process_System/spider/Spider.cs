@@ -58,13 +58,9 @@ namespace c__workspace
         {
             try
             {
-                // string fileName = DateTime.Now.ToString("yyyy-MM-dd");
-                // if (File.Exists(file_path) == false)
-                // {
-                //     File.Create(file_path);
-                // }
                 FileStream fs = new FileStream(file_path, FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs);
+                Logging.AddLog("Wtite to file successfully.");
                 sw.Write(data);
                 //清空缓冲区               
                 sw.Flush();
@@ -87,21 +83,25 @@ namespace c__workspace
         public string get_file_name(string url)
         {
             string file_name = this.root_dir; //数据存储根目录
-            string[] splits;
-            if (url.Contains("uid")) {
-                splits = url.Split("value=");
-                file_name += splits[splits.Length - 1] + ".html";
-                return file_name;
+            string[] splits = url.Split("/");
+            string temp = splits[splits.Length - 1];
+            while ((temp.IndexOfAny(Path.GetInvalidFileNameChars()))>0)
+            {
+                var index = temp.IndexOfAny(Path.GetInvalidFileNameChars());
+                char invalid_char = temp[index];
+                temp = temp.Replace(invalid_char,'-');
             }
-            splits = url.Split("/");
-            string temp = splits[splits.Length - 1].Replace('?','-');
+            if (temp.Length > 250) //太长，做hash取值
+            {
+                temp = "" + temp.GetHashCode();
+            }
             file_name += temp + ".html";
             return file_name;
         }
 
         /// <summary> 传入URL返回网页的html代码 </summary>
         /// <param name="Url"> Url </param>
-        /// <returns>返回页面的源代码</returns>
+        /// <returns>返回页面的源代码, 失败返回空</returns>
         public string get_html_from_url(string Url)
         {
             Encoding encode = new UTF8Encoding();
@@ -127,24 +127,28 @@ namespace c__workspace
                 if (wRespond.StatusCode != HttpStatusCode.OK)
                 {
                     Console.WriteLine("不 ok");
+                    Logging.AddLog("[Warning]:Crawl page failed!");
+                    return null;
                 }
 
                 // 写入文件
                 string file_path = get_file_name(Url);
                 string[] splits = Url.Split("/");
-                new Connect_to_MySQL().insert(splits[splits.Length - 1], Url);
+                // new Connect_to_MySQL().insert(splits[splits.Length - 1], Url);
                 write_to_file(file_path, content);
                 
                 reader.Close();
                 reader.Dispose();
+                Logging.AddLog("Crawl page successfully！");
                 return content;
             }
             catch (Exception ex)
             {
+                Logging.AddLog($"[Exception]:{ex.Message}");
                 Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                // Console.WriteLine(ex.StackTrace);
             }
-            return "";
+            return null;
         }
 
         /// <summary> 执行爬虫 </summary>
@@ -160,6 +164,7 @@ namespace c__workspace
                 Console.WriteLine(cur_url);
                 get_html_from_url(cur_url);
                 var html_path = get_file_name(cur_url);
+                Connect_to_MySQL.insert(html_path, cur_url);
                 if (cur_url.Equals(start_url))
                 {
                     var list = Data_Process.parse_html(html_path);
@@ -173,17 +178,6 @@ namespace c__workspace
                 Data_Process.get_post(cur_url, html_path);
             }
 
-        }
-
-        private string LanChange(string str)
-        {
-            Encoding utf8;
-            Encoding gb2312;
-            utf8 = Encoding.GetEncoding("UTF-8");
-            gb2312 = Encoding.GetEncoding("GB2312");
-            byte[] gb = gb2312.GetBytes(str);
-            gb = Encoding.Convert(gb2312,utf8,gb);
-            return utf8.GetString(gb);
         }
 
         /// <summary> 关键字搜索 </summary>
@@ -207,6 +201,67 @@ namespace c__workspace
                 string cur_url = (string)queue.Dequeue();
                 Console.WriteLine(cur_url);
                 get_html_from_url(cur_url);
+                Connect_to_MySQL.insert(keyword, cur_url);
+                var html_path = get_file_name(cur_url); // 获取报文存储路径
+                var jo = Data_Process.get_Json(html_path);
+                var temp_list = Data_Process.parse_html(html_path);
+                foreach (string item in temp_list)
+                {
+                    Console.WriteLine(item);
+                    get_html_from_url(item);
+                    jo = Data_Process.get_Json(get_file_name(item));
+                    Data_Process.post_stored(jo);
+                    // Data_Process.get_post(item, get_file_name(item));
+                }
+            }
+        }
+
+        /// <summary> 获取评论 </summary>
+        /// <param name="">  </param> 
+        /// <returns>  </returns>
+        public void search_comments(string id,int page)
+        {
+            string path = $"Data_Stored/comments/{id}.txt";
+            string data = "";
+            var queue = new Queue();
+            for (int i = 0; i < page; i++)
+            {
+                var url = $"https://m.weibo.cn/api/comments/show?id={id}&page={i}";
+                queue.Enqueue(url);
+            }
+            while (queue.Count != 0)
+            {
+                string cur_url = (string)queue.Dequeue();
+                var json_text = get_html_from_url(cur_url);
+                if (json_text == null) {
+                    break;
+                }
+                // Console.WriteLine(json_text);
+                JObject jObject = (JObject)JsonConvert.DeserializeObject(json_text);
+                foreach (var item in jObject["data"]["data"])
+                {
+                    var text = Data_Process.content_handler(item["text"].ToString()) + "\n";
+                    data += text;
+                }
+            }
+            write_to_file(path, data);
+
+        }
+
+        /// <summary> 根据爬取userid用户微博 </summary>
+        /// <param name="userid"> userid </param> 
+        /// <returns>  </returns>
+        public void search_for_userid(string userid)
+        {
+            var queue = new Queue();
+            string url = $"https://m.weibo.cn/api/container/getIndex?type=uid&value={userid}";
+            queue.Enqueue(url);
+            while(queue.Count != 0)
+            {
+                string cur_url = (string)queue.Dequeue();
+                Console.WriteLine(cur_url);
+                get_html_from_url(cur_url);
+                Connect_to_MySQL.insert(userid, cur_url);
                 var html_path = get_file_name(cur_url); // 获取报文存储路径
                 var jo = Data_Process.get_Json(html_path);
                 var temp_list = Data_Process.parse_html(html_path);
@@ -220,6 +275,37 @@ namespace c__workspace
             }
         }
 
+        /// <summary> 热点话题追踪 </summary>
+        /// <param name="topic"> Topic </param> 
+        /// <returns>  </returns>
+        public void topic_track(string topic)
+        {
+            var topic_list = new ArrayList();
+            
+            //var url = "https://m.weibo.cn/api/container/getIndex?containerid=100103type%3D38%26q%3D%E8%B5%84%E7%94%9F%E5%A0%82%26t%3D0&page_type=searchall";
+            var url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
+            if (topic.Contains("话题")) {
+                url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Dtopicscene&title=%E8%AF%9D%E9%A2%98%E6%A6%9C&extparam=lon%3D%26lat%3D&luicode=10000011&lfid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot";
+            }
+            get_html_from_url(url);
+            var jo = Data_Process.get_Json(get_file_name(url));
+            foreach (var item in jo["data"]["cards"][0]["card_group"]) // 实时热点
+            {
+                Console.WriteLine(item["desc"].ToString());
+                topic_list.Add(item["scheme"].ToString());
+            }
+            foreach (string item in topic_list)
+            {
+                var splits = item.Split("?");
+                url = "https://m.weibo.cn/api/container/getIndex?" + splits[1];
+                // url = $"https://m.weibo.cn/api/container/getIndex?231522type=1&t=10&q={item}";
+                get_html_from_url(url);
+                jo = Data_Process.get_Json(get_file_name(url));
+                Console.WriteLine(get_file_name(url));
+                Data_Process.topic_stored(jo);
+            }
+
+        }
 
         /// <summary> 解析html网页 </summary>
         /// <param name="html"> 爬取的网页 </param> 
@@ -265,7 +351,7 @@ namespace c__workspace
             // 写入文件
             string file_path = get_file_name(Url);
             string[] splits = Url.Split("/");
-            new Connect_to_MySQL().insert(splits[splits.Length - 1], Url);
+            Connect_to_MySQL.insert(splits[splits.Length - 1], Url);
             write_to_file(file_path, document.Result.DocumentElement.OuterHtml);
 
             var cells = document.Result.QuerySelectorAll(".panel-body li");

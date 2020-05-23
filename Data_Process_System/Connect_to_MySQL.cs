@@ -12,13 +12,13 @@ namespace c__workspace
     */
     class Connect_to_MySQL
     {
-        private string connect_config = "server=localhost;User Id=root;password=123456;Database=information_content_security;port=3306";
-        private string keyword_property = "keyword";
-        private string page_property = "html_name";
-        private string keyword_list = "keywordlist";
+        private static string connect_config = "server=localhost;User Id=root;password=123456;Database=information_content_security;port=3306";
+        private static string keyword_property = "keyword";
+        private static string page_property = "url";
+        private static string keyword_list = "keywordlist";
 
         // 数据库插入操作
-        public Boolean insert(string keyword, string html_name)
+        public static Boolean insert(string keyword, string html_name)
         {
             string query = "insert into " + keyword_list + " (" + keyword_property + "," + page_property + ") values ('" + keyword + "','" + html_name + "')";
             MySqlConnection conn = new MySqlConnection(connect_config);
@@ -28,7 +28,7 @@ namespace c__workspace
                 conn.Open();
                 command.ExecuteNonQuery();
                 conn.Close();
-                Logging.AddLog("insert successfully.");
+                Logging.AddLog("Insert to database successfully.");
             }
             catch (Exception e)
             {
@@ -42,7 +42,7 @@ namespace c__workspace
         }
 
         // 数据库查询操作
-        public ArrayList select_by_keyword(string keyword)
+        public static ArrayList select_by_keyword(string keyword)
         {
             string query = "select " + page_property + " from " + keyword_list + " where " + keyword_property + " = '" + keyword + "'";
             Console.WriteLine(query);
