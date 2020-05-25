@@ -1,4 +1,6 @@
 using System;
+using Front;
+using System.Windows.Forms;
 
 namespace c__workspace
 {
@@ -16,13 +18,14 @@ namespace c__workspace
             // Test_Spider.test_do_crawl();
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
-            Test_Spider.test_topic_track();
+            // Test_Spider.test_topic_track();
 
             // Test_Data_Process.test_get_post();
             // Test_Data_Process.test_parser_html();
             // Test_Data_Process.test_get_Json();
             // Test_Data_Process.test_read_from_csv();
 
+            Test_Front.test_program_run();
         }
 
     }
@@ -156,5 +159,17 @@ namespace c__workspace
             // connect.insert("keyword", "10241");
             Connect_to_MySQL.select_by_keyword("keyword");
         }
+    }
+
+    class Test_Front
+    {
+        public static void test_program_run()
+        {
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new WinForm());
+        }
+        
     }
 }
