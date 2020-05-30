@@ -15,10 +15,6 @@ namespace c__workspace
         static string[] list = { "ID", "主题", "博文", "日期", "URL", "点赞数", "评论数", "转发数" };
         // static string[] topic_column = { "话题", "描述",}
         static string file_name = "Data_Stored//post.csv";
-        public void package_store(string package)
-        {
-            
-        }
 
         /// <summary> 读文件，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
@@ -250,22 +246,38 @@ namespace c__workspace
             string[] units = { "年", "月", "天", "小时", "分钟", "秒"};
             if (current_time.Contains("刚刚"))
                 return DateTime.Now.ToString();
+            if (current_time.Contains("昨天"))
+            {
+                current_time = DateTime.Now.Date.AddDays(-1).ToString();
+                current_time += original_time.Split("昨天")[0];
+                return current_time;
+            }
             foreach(var unit in units)
             {
                 if (!original_time.Contains(unit))
                     continue;
                 var splits = original_time.Split(unit); // 11分钟前
                 // Console.WriteLine(original_time);
-                int timespan = -(int.Parse(splits[0]));
+                int timespan = 0;
+                try
+                {
+                    timespan = -(int.Parse(splits[0]));
+                }
+                catch (System.Exception)
+                {
+                    Logging.AddLog("[Exception] Date : " + original_time);
+                    Console.WriteLine("警告:"+original_time);
+                    return original_time;
+                }
                 switch (unit)
                 {
-                    case "天":
+                    case "年":
                         current_time = DateTime.Now.AddYears(timespan).ToString();
                         break;
                     case "月":
                         current_time = DateTime.Now.AddMonths(timespan).ToString();
                         break;
-                    case "日":
+                    case "天":
                         current_time = DateTime.Now.AddDays(timespan).ToString();
                         break;
                     case "小时":
@@ -344,6 +356,7 @@ namespace c__workspace
                 post.id = blog["id"].ToString();
                 post.subject = blog["source"].ToString(); // 需要修改
                 // Console.WriteLine(post.view_attributes());
+                new Spider().search_comments(post.id, 3);
                 if (store_to_csv(post_to_arraylist(post)))
                 {
                     Logging.AddLog("Add one post to csv successfully.");
@@ -379,6 +392,7 @@ namespace c__workspace
                 post.id = blog["id"].ToString();
                 post.subject = topic; // 需要修改
                 // Console.WriteLine(post.view_attributes());
+                new Spider().search_comments(post.id, 3);
                 if (store_to_csv(post_to_arraylist(post)))
                 {
                     Logging.AddLog("Add one post to csv successfully.");

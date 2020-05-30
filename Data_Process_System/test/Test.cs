@@ -1,5 +1,4 @@
 using System;
-using Front;
 using System.Windows.Forms;
 
 namespace c__workspace
@@ -168,7 +167,7 @@ namespace c__workspace
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new WinForm());
+            // Application.Run(new WinForm());
         }
         
     }

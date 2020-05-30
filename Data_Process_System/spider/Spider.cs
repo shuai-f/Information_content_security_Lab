@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections;
+using System.Threading;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,10 +26,10 @@ namespace c__workspace
         {
             this.cookie_str = read_cookie("Data_Stored//Cookie");
         }
-        public string get_root_dir()
-        {
-            return this.root_dir;
-        }
+        // public string get_root_dir()
+        // {
+        //     return this.root_dir;
+        // }
 
         /// <summary> 辅助：读取cookie，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
@@ -85,7 +86,7 @@ namespace c__workspace
             string file_name = this.root_dir; //数据存储根目录
             string[] splits = url.Split("/");
             string temp = splits[splits.Length - 1];
-            while ((temp.IndexOfAny(Path.GetInvalidFileNameChars()))>0)
+            while ((temp.IndexOfAny(Path.GetInvalidFileNameChars()))>0) // 违法字符判断
             {
                 var index = temp.IndexOfAny(Path.GetInvalidFileNameChars());
                 char invalid_char = temp[index];
@@ -107,6 +108,7 @@ namespace c__workspace
             Encoding encode = new UTF8Encoding();
             try
             {
+                Console.WriteLine(Url);
                 HttpWebRequest wRequest = (HttpWebRequest)WebRequest.Create(Url);
                 wRequest.AllowAutoRedirect = true; // 自动跳转
                 //伪造浏览器数据，避免被防采集程序过滤
@@ -135,7 +137,8 @@ namespace c__workspace
                 string file_path = get_file_name(Url);
                 string[] splits = Url.Split("/");
                 // new Connect_to_MySQL().insert(splits[splits.Length - 1], Url);
-                write_to_file(file_path, content);
+                if (!Url.Contains("show?id="))
+                    write_to_file(file_path, content);
                 
                 reader.Close();
                 reader.Dispose();
@@ -217,7 +220,8 @@ namespace c__workspace
         }
 
         /// <summary> 获取评论 </summary>
-        /// <param name="">  </param> 
+        /// <param name="id"> 博文id </param> 
+        /// <param name="page"> 页数 </param>
         /// <returns>  </returns>
         public void search_comments(string id,int page)
         {
@@ -233,11 +237,15 @@ namespace c__workspace
             {
                 string cur_url = (string)queue.Dequeue();
                 var json_text = get_html_from_url(cur_url);
-                if (json_text == null) {
+                if (json_text == null) { // 不 ok
                     break;
                 }
                 // Console.WriteLine(json_text);
                 JObject jObject = (JObject)JsonConvert.DeserializeObject(json_text);
+                if (jObject["ok"].ToString().Equals("0")) // 无数据
+                {
+                    break;
+                }
                 foreach (var item in jObject["data"]["data"])
                 {
                     var text = Data_Process.content_handler(item["text"].ToString()) + "\n";
@@ -294,12 +302,19 @@ namespace c__workspace
                 Console.WriteLine(item["desc"].ToString());
                 topic_list.Add(item["scheme"].ToString());
             }
+            int count = 0;
             foreach (string item in topic_list)
             {
                 var splits = item.Split("?");
                 url = "https://m.weibo.cn/api/container/getIndex?" + splits[1];
                 // url = $"https://m.weibo.cn/api/container/getIndex?231522type=1&t=10&q={item}";
                 get_html_from_url(url);
+                count++;
+                if (count > 20) 
+                {
+                    Thread.Sleep(10 * 1000);
+                    count = 0;
+                }
                 jo = Data_Process.get_Json(get_file_name(url));
                 Console.WriteLine(get_file_name(url));
                 Data_Process.topic_stored(jo);
