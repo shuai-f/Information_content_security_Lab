@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data_Process_System", "Data_Process_System.csproj", "{083D2B28-8FAC-414A-9474-AB62A979745F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "信息内容安全实验", "..\..\Learning\信息内容安全实验\信息内容安全实验.csproj", "{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{083D2B28-8FAC-414A-9474-AB62A979745F}.Release|x64.Build.0 = Release|Any CPU
 		{083D2B28-8FAC-414A-9474-AB62A979745F}.Release|x86.ActiveCfg = Release|Any CPU
 		{083D2B28-8FAC-414A-9474-AB62A979745F}.Release|x86.Build.0 = Release|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|x64.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|x86.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|x64.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|x64.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|x86.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

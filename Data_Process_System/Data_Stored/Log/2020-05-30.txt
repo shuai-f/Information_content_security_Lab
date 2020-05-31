@@ -234,3 +234,8 @@
 2020-05-30 11:24:57.731,Add one post to csv successfully.
 2020-05-30 11:24:58.503,Wtite to file successfully.
 2020-05-30 11:24:58.505,Crawl page successfully！
+2020-05-30 18:53:24.861,Wtite to file successfully.
+2020-05-30 18:53:24.870,Crawl page successfully！
+2020-05-30 18:53:24.989,Wtite to file successfully.
+2020-05-30 18:59:03.504,[Exception]:The remote server returned an error: (404) Not Found.
+2020-05-30 18:59:03.724,Wtite to file successfully.

@@ -12,9 +12,12 @@ namespace c__workspace
 {
     class Data_Process
     {
-        static string[] list = { "ID", "主题", "博文", "日期", "URL", "点赞数", "评论数", "转发数" };
+        static string[] list_post = { "ID", "主题", "博文", "日期", "URL", "点赞数", "评论数", "转发数" };
+        static string[] list_user = { "博文ID", "用户ID", "用户名", "性别", "主页Url", "关注数", "粉丝数", "微博数" };
         // static string[] topic_column = { "话题", "描述",}
-        static string file_name = "Data_Stored//post.csv";
+        public static string post_file_name = "Data_Stored//csv//post.csv";
+
+        public static string user_file_name = "Data_Stored//csv//user.csv";
 
         /// <summary> 读文件，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
@@ -75,6 +78,20 @@ namespace c__workspace
             list.Add(post.trans_count);
             return list;
         }
+
+        private static ArrayList user_to_arraylist(User user)
+        {
+            var list = new ArrayList();
+            list.Add(user.post_id);
+            list.Add(user.user_id);
+            list.Add(user.user_name);
+            list.Add(user.gender);
+            list.Add(user.profile_url);
+            list.Add(user.follow_count);
+            list.Add(user.followers_count);
+            list.Add(user.statuses_count);
+            return list;
+        }
         
         /// <summary> 获取博文信息 </summary>
         /// <param name="html_path"> html路径 </param> 
@@ -112,7 +129,7 @@ namespace c__workspace
             if (flag)
                 return;
             post.subject = "需对正文做字符串匹配，暂时理解为关键字";
-            if (store_to_csv(post_to_arraylist(post)))
+            if (store_to_csv(post_to_arraylist(post),post_file_name))
             {
                 Logging.AddLog("Add one post to csv");
             }
@@ -127,6 +144,7 @@ namespace c__workspace
             {
                 File.Create(file_name).Close();
                 var sw = new StreamWriter(new FileStream(file_name,FileMode.Append),System.Text.Encoding.UTF8);
+                var list = file_name.Equals(post_file_name) ? list_post : list_user;
                 foreach (var item in list)
                 {
                     if (item.Equals(list[list.Length - 1 ])) 
@@ -149,7 +167,7 @@ namespace c__workspace
         /// <summary> 博文存储为csv文件 </summary>
         /// <param name="list"> 写入参数Arraylist<String> </param> 
         /// <returns>  </returns>
-        public static Boolean store_to_csv(ArrayList list)
+        public static Boolean store_to_csv(ArrayList list, string file_name)
         {
             try
             {
@@ -158,10 +176,15 @@ namespace c__workspace
                     init_csv(file_name);
                 }
                 var sw = new StreamWriter(new FileStream(file_name,FileMode.Append),System.Text.Encoding.UTF8);
-                if (list.Count != Data_Process.list.Length) // 参数检查
+                if (list.Count != Data_Process.list_user.Length) // 参数检查
                 {
                     Console.WriteLine("写入csv文件:参数不对");
-                    Console.WriteLine(list.ToString());
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine((string)item);
+                    }
+                    sw.Close();
+                    sw.Dispose();
                     return false;
                 }
                 for (int i = 0; i < list.Count;i++) //写入一行
@@ -192,7 +215,7 @@ namespace c__workspace
         /// <summary> 读取csv文件 </summary>
         /// <param name="">  </param> 
         /// <returns> post_list </returns>
-        public static ArrayList read_from_csv()
+        public static ArrayList read_from_csv(string file_name)
         {
             var list = new ArrayList();
             FileStream fs = new FileStream(file_name, FileMode.Open, FileAccess.Read);
@@ -332,6 +355,26 @@ namespace c__workspace
             return current_content;
         }
 
+        /// <summary>
+        /// 用户信息提取，从[blog]:json中提取User
+        /// </summary>
+        /// <param name="jObject"> [blog] </param>
+        /// <returns> User </returns>
+        public static User get_User(JToken jObject)
+        {
+            var item = jObject["user"];
+            User user = new User{
+                post_id = jObject["id"].ToString(),
+                user_id = item["id"].ToString(),
+                user_name = item["screen_name"].ToString(),
+                gender = item["gender"].ToString().Contains("m") ? "男" : "女",
+                profile_url = item["profile_url"].ToString(),
+                follow_count = item["follow_count"].ToString(),
+                followers_count = item["followers_count"].ToString(),
+                statuses_count = item["statuses_count"].ToString()
+            };
+            return user;
+        }
         public static void post_stored(JObject jo)
         {
             var item = jo["data"];
@@ -354,12 +397,16 @@ namespace c__workspace
                 post.good_count = blog["attitudes_count"].ToString();
                 post.date = time_handler(blog["created_at"].ToString());
                 post.id = blog["id"].ToString();
-                post.subject = blog["source"].ToString(); // 需要修改
+                post.subject = item["cardlistInfo"]["title_top"].ToString(); // 需要修改
                 // Console.WriteLine(post.view_attributes());
                 new Spider().search_comments(post.id, 3);
-                if (store_to_csv(post_to_arraylist(post)))
+                if (store_to_csv(post_to_arraylist(post),post_file_name))
                 {
                     Logging.AddLog("Add one post to csv successfully.");
+                }
+                if (store_to_csv(user_to_arraylist(get_User(blog)),user_file_name))
+                {
+                    Logging.AddLog($"Succeed to record user of post : {post.id}.");
                 }
                 count++;
             }
@@ -393,14 +440,19 @@ namespace c__workspace
                 post.subject = topic; // 需要修改
                 // Console.WriteLine(post.view_attributes());
                 new Spider().search_comments(post.id, 3);
-                if (store_to_csv(post_to_arraylist(post)))
+                if (store_to_csv(post_to_arraylist(post),post_file_name))
                 {
                     Logging.AddLog("Add one post to csv successfully.");
+                }
+                if (store_to_csv(user_to_arraylist(get_User(blog)),user_file_name))
+                {
+                    Logging.AddLog($"Succeed to record user of post : {post.id}.");
                 }
                 count++;
             }
             Console.WriteLine(count);
         }
+        
         /// <summary> 读取Json文件 </summary>
         /// <param name="file_path"> 文件存储路径 </param> 
         /// <returns> JObject </returns>
@@ -415,7 +467,7 @@ namespace c__workspace
 				json_text += sr.ReadLine();
 			}
 			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
-            // new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
+            new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
             return jo;
         }
     }

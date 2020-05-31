@@ -202,20 +202,20 @@ namespace c__workspace
             while(queue.Count != 0)
             {
                 string cur_url = (string)queue.Dequeue();
-                Console.WriteLine(cur_url);
                 get_html_from_url(cur_url);
                 Connect_to_MySQL.insert(keyword, cur_url);
                 var html_path = get_file_name(cur_url); // 获取报文存储路径
                 var jo = Data_Process.get_Json(html_path);
-                var temp_list = Data_Process.parse_html(html_path);
-                foreach (string item in temp_list)
-                {
-                    Console.WriteLine(item);
-                    get_html_from_url(item);
-                    jo = Data_Process.get_Json(get_file_name(item));
-                    Data_Process.post_stored(jo);
-                    // Data_Process.get_post(item, get_file_name(item));
-                }
+                Data_Process.post_stored(jo);
+                // var temp_list = Data_Process.parse_html(html_path);
+                // foreach (string item in temp_list)
+                // {
+                //     Console.WriteLine(item);
+                //     get_html_from_url(item);
+                //     jo = Data_Process.get_Json(get_file_name(item));
+                //     Data_Process.post_stored(jo);
+                //     // Data_Process.get_post(item, get_file_name(item));
+                // }
             }
         }
 
@@ -310,7 +310,7 @@ namespace c__workspace
                 // url = $"https://m.weibo.cn/api/container/getIndex?231522type=1&t=10&q={item}";
                 get_html_from_url(url);
                 count++;
-                if (count > 20) 
+                if (count > 4) 
                 {
                     Thread.Sleep(10 * 1000);
                     count = 0;
@@ -322,7 +322,32 @@ namespace c__workspace
 
         }
 
-        /// <summary> 解析html网页 </summary>
+        public void movie_track()
+        {
+            var start_url = "https://m.weibo.cn/api/feed/trendtop?containerid=102803_ctg1_3288_-_ctg1_3288";
+            get_html_from_url(start_url);
+            var jo = Data_Process.get_Json(get_file_name(start_url));
+            write_to_file("Data_Stored//json//test.json", jo.ToString());
+            foreach (var blog in jo["data"]["statuses"])
+            {
+                var post = new Post();
+                post.id = blog["id"].ToString();
+                post.url = "https://m.weibo.cn/detail/" + post.id;
+                post.date = blog["created_at"].ToString();
+                post.subject = 
+                post.content = Data_Process.content_handler(blog["text"].ToString());
+                if (post.content.Contains("...全文"))
+                {
+                    post.content = post.content.Split("...全文")[0];
+                }
+                post.trans_count = blog["reposts_count"].ToString();
+                post.comment_count = blog["comments_count"].ToString();
+                post.good_count = blog["attitudes_count"].ToString();
+            }
+
+        }
+        
+        /// <summary> 解析html网页匹配链接 </summary>
         /// <param name="html"> 爬取的网页 </param> 
         /// <returns> void </returns>
         public void parse_html(string html)
@@ -347,51 +372,5 @@ namespace c__workspace
             }
         }
     
-        /// <summary> Using AngleSharp </summary>
-        /// <param name="Url"> 请求网页url </param> 
-        /// <returns>  </returns>
-        public void using_AngleSharp(string Url) 
-        {
-            
-            //Use the default configuration for AngleSharp
-            var config = Configuration.Default.WithDefaultLoader();
-
-            //Create a new context for evaluating webpages with the given config
-            var context = BrowsingContext.New(config);
-
-            //Just get the DOM representation
-            // var document = await context.OpenAsync(req => req.Content(url));
-            var document = context.OpenAsync(Url);
-            // Console.WriteLine(document.Result.DocumentElement.OuterHtml);
-            // 写入文件
-            string file_path = get_file_name(Url);
-            string[] splits = Url.Split("/");
-            Connect_to_MySQL.insert(splits[splits.Length - 1], Url);
-            write_to_file(file_path, document.Result.DocumentElement.OuterHtml);
-
-            var cells = document.Result.QuerySelectorAll(".panel-body li");
-
-            var list = new ArrayList();
-            foreach (var item in cells)
-            {
-                var belle = new Belle
-                {
-                    Title = item.QuerySelector("img").GetAttribute("title"),
-                    ImageUrl = item.QuerySelector("img").GetAttribute("src")
-                };
-                list.Add(belle);
-            }
-            Console.WriteLine(list.Count);
-            foreach (var element in list)
-            {
-                Console.WriteLine(((Belle)element).ImageUrl);
-            }
-
-            // Serialize it back to the console
-            // Console.WriteLine(document.DocumentElement.OuterHtml);
-
-            // write_to_file(this.root_dir + "AngleSharpTest.html", document.);
-
-        }
     }
 }

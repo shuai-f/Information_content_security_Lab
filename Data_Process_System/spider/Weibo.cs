@@ -32,4 +32,23 @@ namespace c__workspace
         }
     }
 
+        class User
+    {
+        public string post_id{ get; set; }
+        public string user_id{ get; set; }
+        public string user_name{ get; set; }
+        public string gender{ get; set; }
+        public string profile_url { get; set; }
+        public string follow_count{ get; set; }
+        public string followers_count{ get; set; }
+        public string statuses_count{ get; set; }
+        
+        public string view_attributes()
+        {
+            string result = $"id={post_id};\nsubject={user_id};\ncontent={user_name};\n"
+                + $"date={gender};\nurl={profile_url};\ngood={follow_count};\ncomments={followers_count};\ntrans={statuses_count};\n";
+            return result;
+        }
+    }
+
 }

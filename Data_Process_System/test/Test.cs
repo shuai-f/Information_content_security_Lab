@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Forms;
 
 namespace c__workspace
 {
@@ -13,18 +12,18 @@ namespace c__workspace
 
             // Test_Spider.test_spider_write_file();
             // Test_Spider.test_spider();
-            // Test_Spider.test_AngleSharp();
             // Test_Spider.test_do_crawl();
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
             // Test_Spider.test_topic_track();
+            // Test_Spider.test_movie_track();
 
             // Test_Data_Process.test_get_post();
             // Test_Data_Process.test_parser_html();
             // Test_Data_Process.test_get_Json();
-            // Test_Data_Process.test_read_from_csv();
+            Test_Data_Process.test_read_from_csv();
 
-            Test_Front.test_program_run();
+            // Test_Front.test_program_run();
         }
 
     }
@@ -63,7 +62,7 @@ namespace c__workspace
         /// <summary> 测试读取csv文件 </summary>
         public static void test_read_from_csv()
         {
-            var results = Data_Process.read_from_csv();
+            var results = Data_Process.read_from_csv(Data_Process.post_file_name);
             foreach (Post post in results)
             {
                 Console.WriteLine(post.view_attributes());
@@ -105,17 +104,6 @@ namespace c__workspace
 
         }
 
-        /// <summary> 测试AngleSharp类 </summary>
-        public static void test_AngleSharp()
-        {
-            var spider = new Spider();
-            // string result = null;
-            //var url = "https://www.weibo.cn/p/1005051862317094/home?from=page_100505&mod=TAB#place";
-            var url = "https://weibo.cn/zhouyangqing912?refer_flag=1028035010_&is_hot=1";
-            spider.using_AngleSharp(url);
-
-        }
-
         /// <summary> 测试执行爬虫 </summary>
         public static void test_do_crawl()
         {
@@ -128,8 +116,8 @@ namespace c__workspace
         public static void test_keyword_search()
         {
             var spider = new Spider();
-            var keyword = "猫";
-            spider.search_for_keyword(keyword,3);
+            var keyword = "快乐大本营";
+            spider.search_for_keyword(keyword,4);
         }
 
         /// <summary> 测试获取微博评论 </summary>
@@ -148,6 +136,13 @@ namespace c__workspace
             var spider = new Spider();
             spider.topic_track(topic);
         }
+
+        /// <summary> 测试专题 </summary>
+        public static void test_movie_track()
+        {
+            var spider = new Spider();
+            spider.movie_track();
+        }
     }
 
     class Test_Connect_To_MySQL
@@ -164,9 +159,9 @@ namespace c__workspace
     {
         public static void test_program_run()
         {
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            // Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            // Application.EnableVisualStyles();
+            // Application.SetCompatibleTextRenderingDefault(false);
             // Application.Run(new WinForm());
         }
         

@@ -25,6 +25,14 @@ C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\obj
 C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\obj\Debug\netcoreapp3.1\Data_Process_System.genruntimeconfig.cache
 C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\AngleSharp.dll
 C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
-c:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\Front.exe
-c:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\Front.dll
-c:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\Front.pdb
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\System.Windows.Extensions.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
