@@ -213,7 +213,7 @@ namespace c__workspace
         }
     
         /// <summary> 读取csv文件 </summary>
-        /// <param name="">  </param> 
+        /// <param name="file_name"> 文件名 </param> 
         /// <returns> post_list </returns>
         public static ArrayList read_from_csv(string file_name)
         {
@@ -225,18 +225,20 @@ namespace c__workspace
             //记录每行记录中的各字段内容  
             string[] aryLine = null;
             //标示是否是读取的第一行  
-            bool IsFirst = true;
+            bool isFirst = true;
+            //判断读取的文件是post还是user
+            bool isPost = file_name.Contains("post") ? true : false;
             var strLine = "";
             int count = 0;
             //逐行读取CSV中的数据  
             while ((strLine = sr.ReadLine()) != null)
             {
                 aryLine = strLine.Split(",");
-                if (IsFirst)
+                if (isFirst)
                 {
-                    IsFirst = false;
+                    isFirst = false;
                 }
-                else
+                else if (isPost)
                 {
                     count++;
                     var post = new Post();
@@ -250,6 +252,21 @@ namespace c__workspace
                     post.comment_count = aryLine[i++];
                     post.trans_count = aryLine[i++];
                     list.Add(post);
+                }
+                else
+                {
+                    count++;
+                    var user = new User();
+                    int i = 0;
+                    user.post_id = aryLine[i++];
+                    user.user_id = aryLine[i++];
+                    user.user_name = aryLine[i++];
+                    user.gender = aryLine[i++];
+                    user.profile_url = aryLine[i++];
+                    user.follow_count = aryLine[i++];
+                    user.followers_count = aryLine[i++];
+                    user.statuses_count = aryLine[i++];
+                    list.Add(user);
                 }
  
             }

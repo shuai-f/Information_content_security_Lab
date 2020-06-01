@@ -92,7 +92,7 @@ namespace c__workspace
                 char invalid_char = temp[index];
                 temp = temp.Replace(invalid_char,'-');
             }
-            if (temp.Length > 250) //太长，做hash取值
+            if (temp.Length > 200) //太长，做hash取值
             {
                 temp = "" + temp.GetHashCode();
             }
@@ -126,7 +126,7 @@ namespace c__workspace
                 string content = reader.ReadToEnd();
                 // Console.WriteLine(content);
 
-                if (wRespond.StatusCode != HttpStatusCode.OK)
+                if (wRespond.StatusCode != HttpStatusCode.OK) // 判断响应状态码
                 {
                     Console.WriteLine("不 ok");
                     Logging.AddLog("[Warning]:Crawl page failed!");
@@ -148,10 +148,23 @@ namespace c__workspace
             catch (Exception ex)
             {
                 Logging.AddLog($"[Exception]:{ex.Message}");
+                if (ex.Message.Contains("403")) // 服务器拒绝响应
+                {
+                    
+                }
                 Console.WriteLine(ex.Message);
                 // Console.WriteLine(ex.StackTrace);
             }
             return null;
+        }
+
+        /// <summary>
+        /// 辅助：延时函数
+        /// </summary>
+        /// <param name="second"> 延时秒数 </param>
+        public void delay(int second)
+        {
+            Thread.Sleep(second * 1000);
         }
 
         /// <summary> 执行爬虫 </summary>
@@ -202,20 +215,15 @@ namespace c__workspace
             while(queue.Count != 0)
             {
                 string cur_url = (string)queue.Dequeue();
-                get_html_from_url(cur_url);
+                while (get_html_from_url(cur_url) == null) 
+                {
+                    delay(10);
+                }
                 Connect_to_MySQL.insert(keyword, cur_url);
                 var html_path = get_file_name(cur_url); // 获取报文存储路径
                 var jo = Data_Process.get_Json(html_path);
                 Data_Process.post_stored(jo);
-                // var temp_list = Data_Process.parse_html(html_path);
-                // foreach (string item in temp_list)
-                // {
-                //     Console.WriteLine(item);
-                //     get_html_from_url(item);
-                //     jo = Data_Process.get_Json(get_file_name(item));
-                //     Data_Process.post_stored(jo);
-                //     // Data_Process.get_post(item, get_file_name(item));
-                // }
+
             }
         }
 
@@ -289,37 +297,53 @@ namespace c__workspace
         public void topic_track(string topic)
         {
             var topic_list = new ArrayList();
-            
+
             //var url = "https://m.weibo.cn/api/container/getIndex?containerid=100103type%3D38%26q%3D%E8%B5%84%E7%94%9F%E5%A0%82%26t%3D0&page_type=searchall";
-            var url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
-            if (topic.Contains("话题")) {
+            var url = "http://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
+            if (topic.Contains("话题"))
+            {
                 url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Dtopicscene&title=%E8%AF%9D%E9%A2%98%E6%A6%9C&extparam=lon%3D%26lat%3D&luicode=10000011&lfid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot";
             }
-            get_html_from_url(url);
-            var jo = Data_Process.get_Json(get_file_name(url));
-            foreach (var item in jo["data"]["cards"][0]["card_group"]) // 实时热点
+            if (get_html_from_url(url) == null)
             {
-                Console.WriteLine(item["desc"].ToString());
-                topic_list.Add(item["scheme"].ToString());
+                delay(10);
+            }
+            var jo = Data_Process.get_Json(get_file_name(url));
+            if (topic.Contains("话题"))
+            {
+                foreach (var item in jo["data"]["cards"]) // 实时热点
+                {
+                    // Console.WriteLine(item["desc"].ToString());
+                    topic_list.Add(item["card_group"][0]["scheme"].ToString());
+                }
+            }
+            else
+            {
+                foreach (var item in jo["data"]["cards"][0]["card_group"]) // 实时热点
+                {
+                    Console.WriteLine(item["desc"].ToString());
+                    topic_list.Add(item["scheme"].ToString());
+                }
             }
             int count = 0;
             foreach (string item in topic_list)
             {
+                if (count >= 4)
+                {
+                    break;
+                }
                 var splits = item.Split("?");
                 url = "https://m.weibo.cn/api/container/getIndex?" + splits[1];
                 // url = $"https://m.weibo.cn/api/container/getIndex?231522type=1&t=10&q={item}";
-                get_html_from_url(url);
-                count++;
-                if (count > 4) 
+                if (get_html_from_url(url) == null)
                 {
-                    Thread.Sleep(10 * 1000);
-                    count = 0;
+                    delay(10);
+                    break;
                 }
                 jo = Data_Process.get_Json(get_file_name(url));
                 Console.WriteLine(get_file_name(url));
                 Data_Process.topic_stored(jo);
             }
-
         }
 
         public void movie_track()

@@ -16,12 +16,12 @@ namespace c__workspace
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
             // Test_Spider.test_topic_track();
-            // Test_Spider.test_movie_track();
+            Test_Spider.test_movie_track();
 
             // Test_Data_Process.test_get_post();
             // Test_Data_Process.test_parser_html();
             // Test_Data_Process.test_get_Json();
-            Test_Data_Process.test_read_from_csv();
+            // Test_Data_Process.test_read_from_csv();
 
             // Test_Front.test_program_run();
         }
@@ -132,7 +132,7 @@ namespace c__workspace
         /// <summary> 测试热点话题追踪 </summary>
         public static void test_topic_track()
         {
-            var topic = "";
+            var topic = "话题";//"";
             var spider = new Spider();
             spider.topic_track(topic);
         }
