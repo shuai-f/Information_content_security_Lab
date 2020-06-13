@@ -465,6 +465,7 @@ namespace c__workspace
                 {
                     Logging.AddLog($"Succeed to record user of post : {post.id}.");
                 }
+                Connect_to_MySQL.insert(topic, post.url);
                 count++;
             }
             Console.WriteLine(count);
@@ -473,7 +474,7 @@ namespace c__workspace
         /// <summary> 读取Json文件 </summary>
         /// <param name="file_path"> 文件存储路径 </param> 
         /// <returns> JObject </returns>
-        public static JObject get_Json(string file_path)
+        public static JObject   get_Json(string file_path)
         {
 			StreamReader sr = new StreamReader(file_path);
             var splits = file_path.Split(@"\");
@@ -484,7 +485,7 @@ namespace c__workspace
 				json_text += sr.ReadLine();
 			}
 			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
-            new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
+            // new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
             return jo;
         }
     }

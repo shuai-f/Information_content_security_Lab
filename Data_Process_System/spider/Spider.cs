@@ -202,7 +202,6 @@ namespace c__workspace
         /// <returns>  </returns>
         public void search_for_keyword(string keyword,int n)
         {
-            // find in SQL
 
             // construct url by keyword
             // https://s.weibo.com/weibo/keyword
@@ -280,14 +279,6 @@ namespace c__workspace
                 Connect_to_MySQL.insert(userid, cur_url);
                 var html_path = get_file_name(cur_url); // 获取报文存储路径
                 var jo = Data_Process.get_Json(html_path);
-                var temp_list = Data_Process.parse_html(html_path);
-                foreach (string item in temp_list)
-                {
-                    Console.WriteLine(item);
-                    get_html_from_url(item);
-                    jo = Data_Process.get_Json(get_file_name(item));
-                    // Data_Process.get_post(item, get_file_name(item));
-                }
             }
         }
 
@@ -299,7 +290,7 @@ namespace c__workspace
             var topic_list = new ArrayList();
 
             //var url = "https://m.weibo.cn/api/container/getIndex?containerid=100103type%3D38%26q%3D%E8%B5%84%E7%94%9F%E5%A0%82%26t%3D0&page_type=searchall";
-            var url = "http://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
+            var url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
             if (topic.Contains("话题"))
             {
                 url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Dtopicscene&title=%E8%AF%9D%E9%A2%98%E6%A6%9C&extparam=lon%3D%26lat%3D&luicode=10000011&lfid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot";
@@ -330,7 +321,8 @@ namespace c__workspace
             {
                 if (count >= 4)
                 {
-                    break;
+                    count = 0;
+                    delay(200);
                 }
                 var splits = item.Split("?");
                 url = "https://m.weibo.cn/api/container/getIndex?" + splits[1];
@@ -343,6 +335,7 @@ namespace c__workspace
                 jo = Data_Process.get_Json(get_file_name(url));
                 Console.WriteLine(get_file_name(url));
                 Data_Process.topic_stored(jo);
+                count++;
             }
         }
 
@@ -371,6 +364,93 @@ namespace c__workspace
 
         }
         
+        private void login()
+        {
+            Encoding encode = new UTF8Encoding();
+            string url = "https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=https://m.weibo.cn/";
+            string postData = $"loginUser=15765513201&loginPassword=f21213";
+
+            //1.获取登录Cookie
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            req.Method = "POST";// POST OR GET， 如果是GET, 则没有第二步传参，直接第三步，获取服务端返回的数据
+            req.AllowAutoRedirect = true;//服务端重定向。一般设置false
+            req.ContentType = "application/x-www-form-urlencoded";//数据一般设置这个值，除非是文件上传
+
+            byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            req.ContentLength = postBytes.Length;
+            Stream postDataStream = req.GetRequestStream();
+            postDataStream.Write(postBytes, 0, postBytes.Length);
+            postDataStream.Close();
+
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+            Stream respStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(respStream, encode);
+            string result = reader.ReadToEnd();
+            write_to_file(get_file_name(url), result)                                     ;
+            // this.cookie_str = resp.Headers.Get("Set-Cookie");//获取登录后的cookie值。
+            Console.WriteLine(resp.Headers.ToString());
+            
+        }
+
+        /// <summary> 发布一条评论 </summary>
+        /// <param name="post_id"> 博文ID </param>
+        /// <param name="comment"> 评论内容 </param>
+        public void post_comments(string post_id, string comment)
+        {
+            Encoding encode = new UTF8Encoding();
+            try
+            {
+                // login();
+                var Url = "https://m.weibo.cn/api/comments/create";
+                // 参数
+                var param = $"content={comment}&mid={post_id}";
+                byte[] bytes = Encoding.ASCII.GetBytes(param);
+
+
+                HttpWebRequest wRequest = (HttpWebRequest)WebRequest.Create(Url);
+                wRequest.AllowAutoRedirect = true; // 自动跳转
+                //伪造浏览器数据，避免被防采集程序过滤
+                wRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
+                wRequest.Method = "POST"; //获取数据的方法
+                wRequest.ContentType = "application/x-www-form-urlencoded"; // 数据提交方式
+                wRequest.ContentLength = bytes.Length;
+                wRequest.Headers.Add("Cooklie", this.cookie_str);
+                wRequest.CookieContainer = new CookieContainer();
+                wRequest.CookieContainer.SetCookies(wRequest.RequestUri, this.cookie_str);
+
+                Console.WriteLine(wRequest.Method + " " + wRequest.RequestUri + " " + wRequest.ProtocolVersion);
+                Console.WriteLine("Accept:"+wRequest.Accept);
+                Console.WriteLine("Host:"+wRequest.Host);
+                Console.WriteLine(wRequest.Headers.ToString());
+                
+                using (Stream reqStream = wRequest.GetRequestStream())
+                {
+                    reqStream.Write(bytes, 0, bytes.Length);
+                    Console.WriteLine(param);
+                }
+                // 响应
+                HttpWebResponse wRespond = (HttpWebResponse)wRequest.GetResponse();
+
+                // 获取输入流
+                Stream respStream = wRespond.GetResponseStream();
+                StreamReader reader = new StreamReader(respStream, encode);
+                string result = reader.ReadToEnd();
+                write_to_file(get_file_name(Url), result);
+                var jo = Data_Process.get_Json(get_file_name(Url));
+                Console.WriteLine(jo.ToString());
+            }
+            catch (Exception ex)
+            {
+                Logging.AddLog($"[Exception]:{ex.Message}");
+                if (ex.Message.Contains("403")) // 服务器拒绝响应
+                {
+                    
+                }
+                Console.WriteLine(ex.Message);
+                // Console.WriteLine(ex.StackTrace);
+            }
+        }
+
         /// <summary> 解析html网页匹配链接 </summary>
         /// <param name="html"> 爬取的网页 </param> 
         /// <returns> void </returns>

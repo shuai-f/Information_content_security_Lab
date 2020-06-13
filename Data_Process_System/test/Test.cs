@@ -12,11 +12,14 @@ namespace c__workspace
 
             // Test_Spider.test_spider_write_file();
             // Test_Spider.test_spider();
+            Test_Spider.test_parse_html();
             // Test_Spider.test_do_crawl();
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
             // Test_Spider.test_topic_track();
-            Test_Spider.test_movie_track();
+            // Test_Spider.test_movie_track();
+            // Test_Spider.test_post_comments();
+            // Test_Spider.test_get_userinfo();
 
             // Test_Data_Process.test_get_post();
             // Test_Data_Process.test_parser_html();
@@ -90,6 +93,15 @@ namespace c__workspace
             spider.write_to_file(file_path, data);
         }
 
+        public static void test_parse_html()
+        {
+            Spider spider = new Spider();
+            string result = null;
+            string strBaseUrl = "https://weibo.cn/comment/J1CBvFHhf?ckAll=1";
+            result = spider.get_html_from_url(strBaseUrl);
+            spider.parse_html(result);
+        }
+
         /// <summary> 测试爬取网页 </summary>
         public static void test_spider()
         {
@@ -132,7 +144,7 @@ namespace c__workspace
         /// <summary> 测试热点话题追踪 </summary>
         public static void test_topic_track()
         {
-            var topic = "话题";//"";
+            var topic = "";//"";
             var spider = new Spider();
             spider.topic_track(topic);
         }
@@ -142,6 +154,21 @@ namespace c__workspace
         {
             var spider = new Spider();
             spider.movie_track();
+        }
+
+        public static void test_get_userinfo()
+        {
+            var spider = new Spider();
+            spider.search_for_userid("5787584212");
+        }
+
+        /// <summary> 测试发布评论 </summary>
+        public static void test_post_comments()
+        {
+            var spider = new Spider();
+            var id = "4496315616490477";
+            var content = "ememmeme";
+            spider.post_comments(id, content);
         }
     }
 

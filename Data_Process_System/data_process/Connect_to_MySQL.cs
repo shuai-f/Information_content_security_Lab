@@ -72,16 +72,5 @@ namespace c__workspace
             return list;
         }
 
-        // 数据库更新操作
-        public Boolean update()
-        {
-            return true;
-        }
-
-        // 数据库删除操作
-        public Boolean delete()
-        {
-            return true;
-        }
     }
 }

@@ -1,0 +1,212 @@
+2020-06-06 17:17:08.263,[Exception]:文件名、目录名或卷标语法不正确。 : 'C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\<!doctype html>
+<html>
+	<head>
+		<meta charset="gb2312">
+		<link rel="dns-prefetch" href="http:\h5.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\u1.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww1.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww2.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww3.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww4.sinaimg.cn">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"\>
+		<link rel="apple-touch-icon" href="http:\u1.sinaimg.cn\upload\h5\img\apple-touch-icon.png">
+		<title>��ӭ��¼ - ����΢��<\title>
+		<meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui">
+		<link rel="stylesheet" href="\css\weibo\signin\login.css?id=201406091907">
+	<\head>
+	<body>
+		<div class="welcome-wrapper">
+			<a id="J-call-app" href="javascript:;" class="label">����΢���ͻ���&gt;&gt;<\a>
+            <input id="J-download-app" type="hidden" name="storeurl" value="">
+			<div class="action">
+				<a href="https:\m.weibo.cn\reg\index?vt=4&res=wel&wm=3349&backURL=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate%2F" class="btn btnRed">ע��<\a>
+				<a href="https:\passport.weibo.cn\signin\login?entry=mweibo&res=wel&wm=3349&r=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate%2F" class="btn btnWhite">��¼<\a>
+			<\div>
+			<a id="QQ-login" href="https:\passport.weibo.com\othersitebind\authorize?site=qq&entry=mweibo&res=wel&callback=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate%2F" class="btn btnQQ"><i class="icon"><\i>ʹ��QQ�����¼<\a>
+		<\div>
+		<script>
+			if ('0' == '1') {
+				document.getElementById('J-call-app').style.display='none';
+				document.getElementById('QQ-login').style.display='none';
+			}
+		<\script>
+		<script>
+			(function(){
+				var ua = navigator.userAgent.toLowerCase();
+				var t;
+			    var config = {
+			        \*scheme:����*\
+			        scheme_IOS: 'sinaweibo:\home',
+			        scheme_Adr: 'sinaweibo:\splash',
+			        download_url: document.getElementById('J-download-app').value,
+			        timeout: 600
+			    };
+
+				function openclient() {
+				    var startTime = Date.now();
+
+
+				    var ifr = document.createElement('iframe');
+				    \ifr.src = 'sinaweibo:\sendweibo';
+				    ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
+				    ifr.style.display = 'none';
+				    document.body.appendChild(ifr);
+				    var t = setTimeout(function() {
+				        var endTime = Date.now();
+				        if (!startTime || endTime - startTime < config.timeout + 200) { \���װ��app�������ͻ��˺�endTime - startTime һ��> timeout + 200
+				        window.location = config.download_url;
+
+				        }
+				    }, config.timeout);
+
+				    window.onblur = function() {
+				        clearTimeout(t);
+				    }
+				}
+				window.addEventListener("DOMContentLoaded", function(){
+					document.getElementById("J-call-app").addEventListener('click',openclient,false);
+
+				}, false);
+			})()
+		<\script>
+	<\body>
+<\html>'
+2020-06-06 17:18:28.063,[Exception]:文件名、目录名或卷标语法不正确。 : 'C:\Users\冯帅\Desktop\Information_content_security_Lab\Data_Process_System\<!doctype html>
+<html>
+	<head>
+		<meta charset="gb2312">
+		<link rel="dns-prefetch" href="http:\h5.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\u1.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww1.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww2.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww3.sinaimg.cn">
+		<link rel="dns-prefetch" href="http:\ww4.sinaimg.cn">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"\>
+		<link rel="apple-touch-icon" href="http:\u1.sinaimg.cn\upload\h5\img\apple-touch-icon.png">
+		<title>��ӭ��¼ - ����΢��<\title>
+		<meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui">
+		<link rel="stylesheet" href="\css\weibo\signin\login.css?id=201406091907">
+	<\head>
+	<body>
+		<div class="welcome-wrapper">
+			<a id="J-call-app" href="javascript:;" class="label">����΢���ͻ���&gt;&gt;<\a>
+            <input id="J-download-app" type="hidden" name="storeurl" value="">
+			<div class="action">
+				<a href="https:\m.weibo.cn\reg\index?vt=4&res=wel&wm=3349&backURL=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate" class="btn btnRed">ע��<\a>
+				<a href="https:\passport.weibo.cn\signin\login?entry=mweibo&res=wel&wm=3349&r=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate" class="btn btnWhite">��¼<\a>
+			<\div>
+			<a id="QQ-login" href="https:\passport.weibo.com\othersitebind\authorize?site=qq&entry=mweibo&res=wel&callback=https%3A%2F%2Fm.weibo.cn%2Fapi%2Fcomments%2Fcreate" class="btn btnQQ"><i class="icon"><\i>ʹ��QQ�����¼<\a>
+		<\div>
+		<script>
+			if ('0' == '1') {
+				document.getElementById('J-call-app').style.display='none';
+				document.getElementById('QQ-login').style.display='none';
+			}
+		<\script>
+		<script>
+			(function(){
+				var ua = navigator.userAgent.toLowerCase();
+				var t;
+			    var config = {
+			        \*scheme:����*\
+			        scheme_IOS: 'sinaweibo:\home',
+			        scheme_Adr: 'sinaweibo:\splash',
+			        download_url: document.getElementById('J-download-app').value,
+			        timeout: 600
+			    };
+
+				function openclient() {
+				    var startTime = Date.now();
+
+
+				    var ifr = document.createElement('iframe');
+				    \ifr.src = 'sinaweibo:\sendweibo';
+				    ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
+				    ifr.style.display = 'none';
+				    document.body.appendChild(ifr);
+				    var t = setTimeout(function() {
+				        var endTime = Date.now();
+				        if (!startTime || endTime - startTime < config.timeout + 200) { \���װ��app�������ͻ��˺�endTime - startTime һ��> timeout + 200
+				        window.location = config.download_url;
+
+				        }
+				    }, config.timeout);
+
+				    window.onblur = function() {
+				        clearTimeout(t);
+				    }
+				}
+				window.addEventListener("DOMContentLoaded", function(){
+					document.getElementById("J-call-app").addEventListener('click',openclient,false);
+
+				}, false);
+			})()
+		<\script>
+	<\body>
+<\html>'
+2020-06-06 17:30:15.722,Wtite to file successfully.
+2020-06-06 17:30:15.748,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 17:33:02.925,Wtite to file successfully.
+2020-06-06 17:33:02.953,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 17:36:54.055,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:38:22.578,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:40:23.849,Wtite to file successfully.
+2020-06-06 17:40:23.870,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 17:43:15.989,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:45:36.396,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:48:36.084,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:49:45.675,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:51:52.105,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:53:12.699,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:54:29.419,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:55:42.377,[Exception]:The remote server returned an error: (403) .
+2020-06-06 17:58:24.091,Wtite to file successfully.
+2020-06-06 17:58:24.127,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 18:02:13.530,Wtite to file successfully.
+2020-06-06 18:02:13.549,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 18:02:25.518,Wtite to file successfully.
+2020-06-06 18:02:25.562,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 18:09:48.557,[Exception]:The remote server returned an error: (302) Found.
+2020-06-06 18:10:58.842,[Exception]:The remote server returned an error: (302) Found.
+2020-06-06 18:12:55.756,[Exception]:The remote server returned an error: (404) Not Found.
+2020-06-06 18:14:16.647,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:16:36.257,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:17:49.109,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:21:35.950,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:22:42.007,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:23:23.650,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:23:47.555,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:25:06.608,Wtite to file successfully.
+2020-06-06 18:25:06.625,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 18:33:27.060,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:37:11.693,Wtite to file successfully.
+2020-06-06 18:37:11.751,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:40:31.008,Wtite to file successfully.
+2020-06-06 18:40:31.106,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 18:41:02.444,Wtite to file successfully.
+2020-06-06 18:41:02.537,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 19:37:32.935,Wtite to file successfully.
+2020-06-06 19:37:32.951,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:26:32.525,Wtite to file successfully.
+2020-06-06 20:26:32.541,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:32:00.820,Wtite to file successfully.
+2020-06-06 20:32:00.837,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:32:17.374,Wtite to file successfully.
+2020-06-06 20:32:17.453,[Exception]:Value cannot be null. (Parameter 'cookieHeader')
+2020-06-06 20:37:03.647,Wtite to file successfully.
+2020-06-06 20:37:03.992,Wtite to file successfully.
+2020-06-06 20:37:04.019,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:39:23.567,Wtite to file successfully.
+2020-06-06 20:39:23.583,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:40:15.087,Wtite to file successfully.
+2020-06-06 20:40:15.108,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:49:58.609,Wtite to file successfully.
+2020-06-06 20:49:58.625,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:50:43.505,Wtite to file successfully.
+2020-06-06 20:50:43.538,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:51:30.011,Wtite to file successfully.
+2020-06-06 20:51:30.030,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
+2020-06-06 20:59:15.951,Wtite to file successfully.
+2020-06-06 20:59:15.975,[Exception]:Unexpected character encountered while parsing value: <. Path '', line 0, position 0.
