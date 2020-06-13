@@ -1,0 +1,140 @@
+<!doctype html>
+<html style="height:100%">
+<head>
+    <meta charset="gb2312">
+    <link rel="dns-prefetch" href="http://h5.sinaimg.cn">
+    <link rel="dns-prefetch" href="http://u1.sinaimg.cn">
+    <link rel="dns-prefetch" href="http://ww1.sinaimg.cn">
+    <link rel="dns-prefetch" href="http://ww2.sinaimg.cn">
+    <link rel="dns-prefetch" href="http://ww3.sinaimg.cn">
+    <link rel="dns-prefetch" href="http://ww4.sinaimg.cn">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="http://u1.sinaimg.cn/upload/h5/img/apple-touch-icon.png">
+    <title>��¼ - ����΢��</title>
+    <meta id="viewport" name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui">
+    <link rel="stylesheet" href="/css/weibo/signin/login.css?id=20141028160201">
+</head>
+<body style="height:100%">
+<div class="login-wrapper" id="loginWrapper" style="display:none">
+    <!-- ��½�ɹ���תҳ -->
+    <input type="hidden" name="url" value='https%3A%2F%2Fm.weibo.cn%2F' id="loginSuccessAddress"/>
+    <!-- ��½rf��ʶ -->
+    <input type="hidden" name="rf"  id="loginRF"/>
+    <input type="hidden" name="rfcal"  id="loginRFCAL"/>
+    <input type="hidden"  id="oldUserName"/>
+    <input type="hidden" value="" id="loginfrom"/>
+    <input type="hidden" value="" id="featurecode"/>
+    <input type="hidden" value="" id="hff" name="hff"/>
+    <input type="hidden" value="" id="hfp" name="hfp"/>
+        <a href="javascript:history.go(-1);" class="close">�ر�</a>
+        <section class="avatar-wrapper" id="avatarWrapper">
+        <!-- ͷ�� -->
+        <img src="" onerror="this.src='/images/weibo/signin/default-avatar_2x.png';"></img>
+    </section>
+    <form>
+        <section class="box">
+            <div class="input-wrapper">
+                <i class="icon forName"></i>
+                <!-- �û��� -->
+                <p class="input-box">
+                    <input type="text" placeholder="����/�ֻ���" id="loginName" >
+                    <!-- ����û���С�� -->
+                    <a href="javascript:;" class="input-clear" id="loginnameclear" style="display:none" ></a>
+                </p>
+            </div>
+            <div class="input-wrapper">
+                <i class="icon forPwd"></i>
+                <p class="input-box"><input type="password" placeholder="����������" id="loginPassword"></p>
+            </div>
+        </section>
+
+        <!-- Ҫ�������� hid -->
+        <div id="verifyCodeWrapper" style="display:none">
+            <p class="vcode">
+                <img src="" alt="" id="verifyCodeImage">
+                <a href="javascript:;" id="changeVerifyCode">��һ��</a>
+            </p>
+
+
+            <!-- Ҫ�������� hid -->
+            <div class="box">
+                <input type="text" placeholder="��������֤��" id = "loginVCode">
+            </div>
+        </div>
+
+        <!-- Ҫ�������� hid -->
+        <div id = "dVerifyCodeWrapper" style = "display:none" >
+            <p class="shield-tit">��̬��</p>
+
+            <!-- Ҫ�������� hid -->
+            <div class="box">
+                <input type="text" name="shieldCode" placeholder="������΢�ܶ�̬��" id = "loginDVCode">
+            </div>
+        </div>
+        <div id="errorMsg" class="error-label" style = "display:none">�ֻ��Ų���Ϊ��</div>
+
+        <a href="javascript:;" class="btn btnRed" id = "loginAction">��¼</a>
+    </form>
+        <p class="label" >
+    <a href="https://passport.weibo.cn/signin/other?r=https%3A%2F%2Fm.weibo.cn%2F">�������ʺ�</a>
+    </p>
+    <footer class="footer">
+        <a href="https://m.weibo.cn/reg/index?&vt=4&wm=3349&wentry=&backURL=https%3A%2F%2Fm.weibo.cn%2F">ע���ʺ�</a><a href="https://passport.weibo.cn/forgot/forgot?entry=wapsso&from=0&r=https%3A%2F%2Fm.weibo.cn%2F">��������</a>
+    </footer>
+        </div>
+
+<!-- Ҫ�������� hid -->
+<div class="popup" style = "display:none" id = "errorDialog">
+    <article class="wrapper" style="top:180px;" id = "errorDialogPanel">
+        <header class="title"></header>
+        <span class="info" id = "errorDialogMsg">�ʺŻ����������Ҳ����ѡ�������֤�뷽ʽ��¼΢����</span>
+        <div class="action">
+            <a href="javascript:;" class="btn cancel" id = "errorDialogBtnF">ȡ��</a>
+            <a href="javascript:;" class="btn confirm" id = "errorDialogBtnT">��֤���¼</a>
+        </div>
+    </article>
+</div>
+
+<div class="account-wrapper" style = "display:none" id = "accountWrapper">
+    <a href="javascript:history.go(-1);" class="close">�ر�</a>
+    <section class="avatar-wrapper">
+        <!-- ͷ�� -->
+        <img id = "ucavatar" src="/images/weibo/signin/default-avatar_2x.png" onerror="this.src='/images/weibo/signin/default-avatar_2x.png';" alt="">
+    </section>
+    <p class="label" id = "uctext">ʹ��<span id = "ucname"></span>�����ݵ�¼��ҳ��΢��</p>
+    <p class="label" id = "weibotext">��⵽������΢���ͻ��˵�¼<br>�Ƿ��ȡ�õ�¼״̬��</p>
+    <a href="javascript:;" class="btn btnRed" id = "ucORweiboLogin">ȷ��</a>
+    <a href="javascript:;" class="btn btnWhite" id = "changeLogin">ʹ�������ʺŵ�¼</a>
+</div>
+<form method="post" action="https://open.weibo.cn/oauth2/authorize" id="postform">
+        <button type='submit' style="display:none"></button>
+</form>
+<script type="text/javascript" >
+    var fEntry = '';
+    var fWentry = '';
+    var fBackUrl = '';
+
+        fEntry = 'mweibo';
+    
+    
+        fBackUrl = 'https%3A%2F%2Fm.weibo.cn%2F';
+        var fClientid = '';
+        var fCode = '';
+        var fQq = '';
+    </script>
+
+<!-- ��¼wifi -->
+
+<script charset="gb2312" type="text/javascript" src="/js/signin/req.js?v=20181220"></script>
+<script charset="gb2312" type="text/javascript" src="/js/signin/weibologin.js?v=20181220"></script>
+<script type="text/javascript" >
+    //��ס�û�����ʱ����Ҫ��mode����Ϊ1
+    
+
+    
+    //��������Ҫ΢��
+    </script>
+</body>
+</html>
