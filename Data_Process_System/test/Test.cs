@@ -12,12 +12,12 @@ namespace c__workspace
 
             // Test_Spider.test_spider_write_file();
             // Test_Spider.test_spider();
-            Test_Spider.test_parse_html();
+            // Test_Spider.test_parse_html();
             // Test_Spider.test_do_crawl();
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
             // Test_Spider.test_topic_track();
-            // Test_Spider.test_movie_track();
+            Test_Spider.test_movie_track();
             // Test_Spider.test_post_comments();
             // Test_Spider.test_get_userinfo();
 
@@ -27,6 +27,7 @@ namespace c__workspace
             // Test_Data_Process.test_read_from_csv();
 
             // Test_Front.test_program_run();
+            // Test_Secure_Manage.test_match();
         }
 
     }
@@ -153,7 +154,7 @@ namespace c__workspace
         public static void test_movie_track()
         {
             var spider = new Spider();
-            spider.movie_track();
+            spider.track(5);
         }
 
         public static void test_get_userinfo()
@@ -192,5 +193,22 @@ namespace c__workspace
             // Application.Run(new WinForm());
         }
         
+    }
+
+    class Test_Secure_Manage
+    {
+        public static void test_match()
+        {
+            var post_list = Data_Process.read_from_csv(Data_Process.post_file_name);
+            var secure_manage = new Secure_Manage();
+            // secure_manage.show_list();
+            foreach (var item in post_list)
+            {
+                var flag = secure_manage.match(((Post)item).content);
+                if(flag) {
+                    Data_Process.store_to_csv(Data_Process.post_to_arraylist(((Post)item)), Data_Process.insecure_file_name);
+                }
+            }
+        }
     }
 }

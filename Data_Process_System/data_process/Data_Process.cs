@@ -19,6 +19,8 @@ namespace c__workspace
 
         public static string user_file_name = "Data_Stored//csv//user.csv";
 
+        public static string insecure_file_name = "Data_Stored//csv//insecure.csv";
+
         /// <summary> 读文件，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
         /// <returns> 返回读取列表 </returns>
@@ -65,7 +67,7 @@ namespace c__workspace
             // spider.parse_html(page);
         }
 
-        private static ArrayList post_to_arraylist(Post post)
+        public static ArrayList post_to_arraylist(Post post)
         {
             var list = new ArrayList();
             list.Add(post.id);
@@ -79,7 +81,7 @@ namespace c__workspace
             return list;
         }
 
-        private static ArrayList user_to_arraylist(User user)
+        public static ArrayList user_to_arraylist(User user)
         {
             var list = new ArrayList();
             list.Add(user.post_id);
@@ -144,7 +146,7 @@ namespace c__workspace
             {
                 File.Create(file_name).Close();
                 var sw = new StreamWriter(new FileStream(file_name,FileMode.Append),System.Text.Encoding.UTF8);
-                var list = file_name.Equals(post_file_name) ? list_post : list_user;
+                var list = !file_name.Equals(user_file_name) ? list_post : list_user;
                 foreach (var item in list)
                 {
                     if (item.Equals(list[list.Length - 1 ])) 
@@ -372,6 +374,22 @@ namespace c__workspace
             return current_content;
         }
 
+        public static Post get_Post(JToken jObject)
+        {
+            var item = jObject["mblog"];
+            var post = new Post
+            {
+                id = item["id"].ToString(),
+                subject = item["source"].ToString(),
+                content = item["isLongText"].ToString().Contains("true") ? content_handler(item["text"].ToString()) : item["raw_text"].ToString(),
+                date = time_handler(item["created_at"].ToString()),
+                url = jObject["scheme"].ToString(),
+                trans_count = item["reposts_count"].ToString(),
+                good_count = item["attitudes_count"].ToString(),
+                comment_count = item["comments_count"].ToString()
+            };
+            return post;
+        }
         /// <summary>
         /// 用户信息提取，从[blog]:json中提取User
         /// </summary>
@@ -457,6 +475,11 @@ namespace c__workspace
                 post.subject = topic; // 需要修改
                 // Console.WriteLine(post.view_attributes());
                 new Spider().search_comments(post.id, 3);
+                if (new Secure_Manage().match(post.content))
+                {
+                    store_to_csv(post_to_arraylist(post), insecure_file_name);
+                    continue;
+                }
                 if (store_to_csv(post_to_arraylist(post),post_file_name))
                 {
                     Logging.AddLog("Add one post to csv successfully.");

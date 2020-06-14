@@ -26,10 +26,6 @@ namespace c__workspace
         {
             this.cookie_str = read_cookie("Data_Stored//Cookie");
         }
-        // public string get_root_dir()
-        // {
-        //     return this.root_dir;
-        // }
 
         /// <summary> 辅助：读取cookie，按行读取 </summary>
         /// <param name="file_path"> 文件路径（含文件名） </param> 
@@ -288,7 +284,6 @@ namespace c__workspace
         public void topic_track(string topic)
         {
             var topic_list = new ArrayList();
-
             //var url = "https://m.weibo.cn/api/container/getIndex?containerid=100103type%3D38%26q%3D%E8%B5%84%E7%94%9F%E5%A0%82%26t%3D0&page_type=searchall";
             var url = "https://m.weibo.cn/api/container/getIndex?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&title=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&extparam=cate%3D10103%26pos%3D0_0%26mi_cid%3D100103%26filter_type%3Drealtimehot%26c_type%3D30%26display_time%3D1590247150&luicode=10000011&lfid=231583";
             if (topic.Contains("话题"))
@@ -319,11 +314,14 @@ namespace c__workspace
             int count = 0;
             foreach (string item in topic_list)
             {
-                if (count >= 4)
+                if (count >= 5)
                 {
                     count = 0;
-                    delay(200);
+                    delay(600);
                 }
+                var keyword_list = Connect_to_MySQL.select_by_keyword((string)item);
+                if (keyword_list.Count != 0)
+                    continue;
                 var splits = item.Split("?");
                 url = "https://m.weibo.cn/api/container/getIndex?" + splits[1];
                 // url = $"https://m.weibo.cn/api/container/getIndex?231522type=1&t=10&q={item}";
@@ -339,27 +337,26 @@ namespace c__workspace
             }
         }
 
-        public void movie_track()
+        public void track(int page)
         {
-            var start_url = "https://m.weibo.cn/api/feed/trendtop?containerid=102803_ctg1_3288_-_ctg1_3288";
-            get_html_from_url(start_url);
-            var jo = Data_Process.get_Json(get_file_name(start_url));
-            write_to_file("Data_Stored//json//test.json", jo.ToString());
-            foreach (var blog in jo["data"]["statuses"])
+            for (int i = 0; i < page; i++)
             {
-                var post = new Post();
-                post.id = blog["id"].ToString();
-                post.url = "https://m.weibo.cn/detail/" + post.id;
-                post.date = blog["created_at"].ToString();
-                post.subject = 
-                post.content = Data_Process.content_handler(blog["text"].ToString());
-                if (post.content.Contains("...全文"))
+                var start_url = $"https://m.weibo.cn/api/container/getIndex?containerid=102803&openApp=0&since_id={i}"; ;
+                get_html_from_url(start_url);
+                var jo = Data_Process.get_Json(get_file_name(start_url));
+                write_to_file("Data_Stored//json//热门.json", jo.ToString());
+                foreach (var blog in jo["data"]["cards"])
                 {
-                    post.content = post.content.Split("...全文")[0];
+                    var post = Data_Process.get_Post(blog);
+                    if (new Secure_Manage().match(post.content))
+                    {
+                        Data_Process.store_to_csv(Data_Process.post_to_arraylist(post), Data_Process.insecure_file_name);
+                        continue;
+                    }
+                    var user = Data_Process.get_User(blog["mblog"]);
+                    Data_Process.store_to_csv(Data_Process.post_to_arraylist(post), Data_Process.post_file_name);
+                    Data_Process.store_to_csv(Data_Process.user_to_arraylist(user), Data_Process.user_file_name);
                 }
-                post.trans_count = blog["reposts_count"].ToString();
-                post.comment_count = blog["comments_count"].ToString();
-                post.good_count = blog["attitudes_count"].ToString();
             }
 
         }
