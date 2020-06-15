@@ -435,6 +435,11 @@ namespace c__workspace
                 post.subject = item["cardlistInfo"]["title_top"].ToString(); // 需要修改
                 // Console.WriteLine(post.view_attributes());
                 new Spider().search_comments(post.id, 3);
+                if (new Secure_Manage().match(post.content))
+                {
+                    store_to_csv(post_to_arraylist(post), insecure_file_name);
+                    continue;
+                }
                 if (store_to_csv(post_to_arraylist(post),post_file_name))
                 {
                     Logging.AddLog("Add one post to csv successfully.");
@@ -508,7 +513,7 @@ namespace c__workspace
 				json_text += sr.ReadLine();
 			}
 			JObject jo = (JObject)JsonConvert.DeserializeObject(json_text);
-            // new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
+            new Spider().write_to_file($"Data_Stored//json//{file_path.Split(".")[0]}.json", jo.ToString());
             return jo;
         }
     }

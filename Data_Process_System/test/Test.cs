@@ -6,7 +6,7 @@ namespace c__workspace
     {
         static void Main(string[] args)
         {
-            // Test_Connect_To_MySQL.test_connect(); 
+            Test_Connect_To_MySQL.test_connect(); 
 
             // Test_Logging.test_logging();
 
@@ -17,7 +17,7 @@ namespace c__workspace
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
             // Test_Spider.test_topic_track();
-            Test_Spider.test_movie_track();
+            // Test_Spider.test_movie_track();
             // Test_Spider.test_post_comments();
             // Test_Spider.test_get_userinfo();
 
@@ -129,7 +129,7 @@ namespace c__workspace
         public static void test_keyword_search()
         {
             var spider = new Spider();
-            var keyword = "快乐大本营";
+            var keyword = "快乐";
             spider.search_for_keyword(keyword,4);
         }
 
