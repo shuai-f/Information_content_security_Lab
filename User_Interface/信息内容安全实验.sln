@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "信息内容安全实验", "信息内容安全实验.csproj", "{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1110DF8C-0C23-4AA6-BC47-A15D3EBF1219}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62560434-CC3E-44DD-8F96-0233E081BBEC}
+	EndGlobalSection
+EndGlobal
