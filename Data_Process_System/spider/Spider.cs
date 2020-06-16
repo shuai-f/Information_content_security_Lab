@@ -307,18 +307,18 @@ namespace c__workspace
             {
                 foreach (var item in jo["data"]["cards"][0]["card_group"]) // 实时热点
                 {
-                    Console.WriteLine(item["desc"].ToString());
                     topic_list.Add(item["scheme"].ToString());
                 }
             }
             int count = 0;
             foreach (string item in topic_list)
             {
-                if (count >= 5)
+                if (count >= 4)
                 {
                     count = 0;
                     delay(600);
                 }
+                var temp_sw = DateTime.Now;
                 var keyword_list = Connect_to_MySQL.select_by_keyword((string)item);
                 if (keyword_list.Count != 0)
                     continue;
@@ -333,6 +333,8 @@ namespace c__workspace
                 jo = Data_Process.get_Json(get_file_name(url));
                 Console.WriteLine(get_file_name(url));
                 Data_Process.topic_stored(jo);
+                var one_topic = DateTime.Now.Subtract(temp_sw).Milliseconds;
+                Console.WriteLine($"该话题追踪用时：{one_topic}ms");
                 count++;
             }
         }

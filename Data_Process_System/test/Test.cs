@@ -1,12 +1,12 @@
 using System;
-
+using System.Diagnostics;
 namespace c__workspace
 {
     class Test
     {
         static void Main(string[] args)
         {
-            Test_Connect_To_MySQL.test_connect(); 
+            // Test_Connect_To_MySQL.test_connect(); 
 
             // Test_Logging.test_logging();
 
@@ -16,7 +16,7 @@ namespace c__workspace
             // Test_Spider.test_do_crawl();
             // Test_Spider.test_keyword_search();
             // Test_Spider.test_get_comments();
-            // Test_Spider.test_topic_track();
+            Test_Spider.test_topic_track();
             // Test_Spider.test_movie_track();
             // Test_Spider.test_post_comments();
             // Test_Spider.test_get_userinfo();
